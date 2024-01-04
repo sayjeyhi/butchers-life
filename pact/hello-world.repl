@@ -1,0 +1,17 @@
+;; pact code expects to be run on a chainweb enviroment
+;; for testing purposes, we can use the pact repl to simulate a chainweb environment
+
+;; begin-tx and commit-tx simulate a transaction
+(begin-tx "Load modules")
+;; set transaction JSON data
+(env-data {
+  'hello-ks: { "keys": [], "pred": "keys-all" }
+})
+(define-namespace "free" (read-keyset "hello-ks") (read-keyset "hello-ks"))
+;; load hello-world
+(load "hello-world.pact")
+;; run hello-world say-hello
+(print (hello-world.say-hello "Swuwi"))
+;; commit the transaction
+(commit-tx)
+
