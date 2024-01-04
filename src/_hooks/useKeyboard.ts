@@ -26,6 +26,10 @@ export const useKeyboard = () => {
         }
       } else if (status === 'paused') {
         dispatch({ type: 'start' });
+      } else if (status === 'not-started') {
+        dispatch({ type: 'start' });
+      } else if (status === 'idle') {
+        dispatch({ type: 'play' });
       }
     };
 

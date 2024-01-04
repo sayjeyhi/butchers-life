@@ -14,7 +14,7 @@ interface LeaderBoardEntry {
 }
 
 interface GameState {
-  status: 'start' | 'playing' | 'gameover' | 'paused';
+  status: 'idle' | 'not-started' | 'playing' | 'game-over' | 'paused';
   timer: number;
   enemies: GameObject[];
   coins: GameObject[];
@@ -37,18 +37,19 @@ function randomPositions(count: number) {
 }
 
 const initialState: GameState = {
-  status: 'start', // start, playing, game over, paused
-  timer: 0,
+  status: 'not-started',
+  timer: GAME_TIME,
   enemies: randomPositions(NB_ENEMIES),
   coins: randomPositions(10),
   meats: randomPositions(10),
   showBomb: false,
   leaderBoard: [],
   playerPosition: 'center',
-  playerAnimation: 'slowRun',
+  playerAnimation: 'idle',
 };
 
 type GameStartAction = { type: 'start' };
+type GamePlayAction = { type: 'play' };
 type GameRestartAction = { type: 'restart' };
 type GamePauseAction = { type: 'pause' };
 type GameResumeAction = { type: 'resume' };
@@ -59,10 +60,11 @@ type GameMoveRightAction = { type: 'move-right' };
 type GameHideBombAction = { type: 'hideBomb' };
 type GameUpdateLoopAction = { type: 'updateLoop' };
 type GameRespawnAction = { type: 'respawn' };
-type GameChangeCharacterAnimationAction = { type: 'setCharacterAnimation', payload: string };
+type GameChangeCharacterAnimationAction = { type: 'setCharacterAnimation'; payload: string };
 
 type GameAction =
   | GameStartAction
+  | GamePlayAction
   | GameRestartAction
   | GamePauseAction
   | GameResumeAction
@@ -81,17 +83,22 @@ const GameStateDispatchContext = createContext<Dispatch<GameAction> | undefined>
 function gameReducer(state: GameState, action: GameAction): GameState {
   if (action.type === 'start') {
     return {
-      ...state,
-      timer: GAME_TIME,
+      ...initialState,
+      status: 'idle',
+      playerAnimation: 'idle',
+    };
+  }
+  if (action.type === 'play') {
+    return {
+      ...initialState,
       status: 'playing',
-      playerPosition: 'center',
       playerAnimation: 'slowRun',
     };
   }
   if (action.type === 'restart') {
     return {
       ...state,
-      status: 'start',
+      status: 'not-started',
       timer: 0,
       leaderBoard: [],
       playerPosition: 'center',
@@ -158,7 +165,7 @@ function gameReducer(state: GameState, action: GameAction): GameState {
     if (timer <= 0) {
       return {
         ...state,
-        status: 'gameover',
+        status: 'game-over',
       };
     }
     return {

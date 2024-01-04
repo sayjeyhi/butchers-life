@@ -21,15 +21,17 @@ yellowColor.multiplyScalar(12);
 
 const colors = [greenColor, redColor, whiteColor, blueColor, yellowColor];
 
-const AnimatedBox = ({ scale, target, speed, color }) => {
+const AnimatedBox = ({ scale, target, speed, color }: any) => {
   const ref = useRef();
-  const creationTime = useRef(Date.now());
   useFrame((_, delta) => {
+    if (!ref.current) return;
+
     if (ref.current.scale.x > 0) {
       ref.current.scale.x = ref.current.scale.y = ref.current.scale.z -= speed * delta;
     }
     ref.current.position.lerp(target, speed);
   });
+
   return <Instance ref={ref} scale={scale} position={[0, 0, 0]} color={color} />;
 };
 
@@ -53,8 +55,9 @@ export const Explosion = ({
         scale, //MathUtils.randFloat(0.03, 0.09),
         speed: MathUtils.randFloat(0.4, 0.6),
       })),
-    [nb],
+    [limitX, limitY, limitZ, nb, scale],
   );
+
   return (
     <group position={[position.x, position.y, position.z]}>
       <Instances>

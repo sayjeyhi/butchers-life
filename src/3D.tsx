@@ -13,12 +13,10 @@ import { Butcher } from './Playing/models/Butcher.tsx';
 import { Ghost } from './Playing/models/enemies/Ghost.tsx';
 import { useKeyboard } from './_hooks/useKeyboard.ts';
 
-
 export const ThreeD = () => {
   useKeyboard();
   const player = useRef();
   const { enemies, status, showBomb, coins, meats } = useGame();
-
 
   return (
     <>
@@ -28,10 +26,10 @@ export const ThreeD = () => {
       <directionalLight position={[10, 1.4, 10]} intensity={0.2} />
       <directionalLight position={[0, 50, 180]} intensity={0.1} />
 
-      <group visible={status === 'playing' || status === 'paused'}>
-        <City position-z={status === 'start' ? 42 : 0} />
-        <City position-z={status === 'start' ? 42 : -GAMEBOARD_LENGTH} />
-        <City position-z={status === 'start' ? 42 : GAMEBOARD_LENGTH} />
+      <group visible={status !== 'game-over'}>
+        <City position-z={status === 'not-started' ? 42 : 0} />
+        <City position-z={status === 'not-started' ? 42 : -GAMEBOARD_LENGTH} />
+        <City position-z={status === 'not-started' ? 42 : GAMEBOARD_LENGTH} />
 
         {showBomb && <Explosion />}
         {enemies.map((_, index) => {
@@ -45,7 +43,7 @@ export const ThreeD = () => {
           );
         })}
         {coins.map((_, index) => (
-          <group key={index} position-z={20 + index * COIN_SPACE} position-x={-0.32}>
+          <group key={index} position-z={20 + index * COIN_SPACE} position-x={-0.32} layers={1}>
             <Coin scale={0.09} />
           </group>
         ))}
@@ -55,13 +53,11 @@ export const ThreeD = () => {
           </group>
         ))}
 
-
         <Grave position-y={0} position-z={23} scale={0.08} />
         <Knife position-y={0} position-z={20} scale={0.08} />
         <Spider position-y={0} position-z={15} position-x={0.32} scale={0.19} />
+        <Butcher group={player} scale={0.09} />
       </group>
-
-      <Butcher group={player} position-z={4} scale={0.09} />
     </>
   );
 };

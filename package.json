@@ -14,9 +14,11 @@
     "format": "prettier --write src"
   },
   "dependencies": {
+    "@kadena/client": "^1.7.0",
     "@react-three/drei": "9.75.0",
     "@react-three/fiber": "8.15.13",
     "@react-three/postprocessing": "^2.15.11",
+    "@react-three/rapier": "^1.2.1",
     "@types/three": "0.160.0",
     "framer-motion": "^10.17.4",
     "playroomkit": "^0.0.53",
@@ -24,8 +26,7 @@
     "react-dom": "^18.2.0",
     "three": "0.160.0",
     "three-stdlib": "^2.28.11",
-    "tinygesture": "^3.0.0",
-    "@kadena/client": "^1.7.0"
+    "tinygesture": "^3.0.0"
   },
   "devDependencies": {
     "@kadena/pactjs-cli": "^1.7.0",

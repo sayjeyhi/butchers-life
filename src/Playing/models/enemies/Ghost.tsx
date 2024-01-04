@@ -1,7 +1,8 @@
 import { useAnimations, useGLTF } from '@react-three/drei';
 import { useGraph } from '@react-three/fiber';
-import { useEffect, useMemo, useRef } from 'react';
+import { useMemo, useRef } from 'react';
 import { SkeletonUtils } from 'three-stdlib';
+import { useMoveItemOnRoad } from '../../hooks/useMoveItemOnRoad.ts';
 import { useGame } from '../../../_hooks/useGame.tsx';
 
 export function Ghost(props: JSX.IntrinsicElements['group']) {
@@ -9,17 +10,14 @@ export function Ghost(props: JSX.IntrinsicElements['group']) {
   const { scene, materials, animations } = useGLTF('/models/cute-enemy-final.glb');
   const clone = useMemo(() => SkeletonUtils.clone(scene), [scene]);
   const { nodes } = useGraph(clone);
+  const { actions } = useAnimations(animations, group);
   const { status } = useGame();
 
-  const { actions } = useAnimations(animations, group);
-  useEffect(() => {
-    if (status === 'paused') {
-      actions['Armature.001Action']!.stop();
-      actions['Armature.001Action']!.fadeOut(0.1);
-    }
-    actions['Armature.001Action']!.fadeIn(0.1).play();
-    actions['Armature.001Action']!.setEffectiveTimeScale(1.5);
-  }, [status]);
+  useMoveItemOnRoad({ animation: actions['Armature.001Action']!, sticky: true });
+
+  if (status === 'idle') {
+    return null;
+  }
 
   return (
     <group ref={group} {...props} dispose={null}>

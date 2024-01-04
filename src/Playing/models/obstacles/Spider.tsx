@@ -1,28 +1,13 @@
-import React, { useEffect, useRef } from 'react';
+import { useRef } from 'react';
 import { useGLTF, useAnimations } from '@react-three/drei';
-import { useGame } from '../../../_hooks/useGame.tsx';
-import { useFrame } from '@react-three/fiber';
-import { SCROLL_SPEED } from '../../../App.tsx';
+import { useMoveItemOnRoad } from '../../hooks/useMoveItemOnRoad.ts';
 
-export function Spider(props) {
-  const group = useRef();
+export function Spider(props: JSX.IntrinsicElements['group']) {
+  const group = useRef(null);
   const { nodes, materials, animations } = useGLTF('/models/spider-with-web-final-12.glb');
   const { actions } = useAnimations(animations, group);
 
-  const { status } = useGame();
-
-  useEffect(() => {
-    if (status === 'paused') {
-      actions['watch'].stop();
-      actions['watch'].fadeOut(0.1);
-    }
-    actions['watch'].fadeIn(0.1).play();
-    actions['watch'].setEffectiveTimeScale(1.5);
-  }, [status]);
-
-  useFrame((_, delta) => {
-    group.current.position.z -= SCROLL_SPEED * delta;
-  });
+  useMoveItemOnRoad({ ref: group.current!, animation: actions['watch']! });
 
   return (
     <group ref={group} {...props} dispose={null}>
