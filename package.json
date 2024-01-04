@@ -14,7 +14,7 @@
     "format": "prettier --write src"
   },
   "dependencies": {
-    "@react-three/drei": "9.92.7",
+    "@react-three/drei": "9.75.0",
     "@react-three/fiber": "8.15.13",
     "@react-three/postprocessing": "^2.15.11",
     "@types/three": "0.160.0",
