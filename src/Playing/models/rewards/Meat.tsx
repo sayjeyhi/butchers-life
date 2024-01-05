@@ -1,10 +1,13 @@
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { useGLTF, useAnimations } from '@react-three/drei';
 import { useMoveItemOnRoad } from '../../hooks/useMoveItemOnRoad.ts';
 import { RigidBody } from '@react-three/rapier';
 import { useGame } from '../../../_hooks/useGame.tsx';
+import { animate, useMotionValue } from 'framer-motion';
+import { framerMotionConfig } from '../../../constants.ts';
+import { useFrame } from '@react-three/fiber';
 
-export function Meat(props: JSX.IntrinsicElements['group']) {
+export function Meat(props: JSX.IntrinsicElements['group'] & { isCollected: boolean; itemId: number }) {
   const group = useRef(null);
   const rigid = useRef(null);
   const { nodes, materials, animations } = useGLTF('/models/meat-final.glb');
@@ -22,6 +25,24 @@ export function Meat(props: JSX.IntrinsicElements['group']) {
   });
   const { status } = useGame();
 
+  const coinPositionX = useMotionValue(0);
+  const coinPositionY = useMotionValue(0);
+  const coinPositionZ = useMotionValue(0);
+  useEffect(() => {
+    if (props.isCollected) {
+      animate(coinPositionX, -1.6, framerMotionConfig);
+      animate(coinPositionY, 1.12, framerMotionConfig);
+      animate(coinPositionZ, 16, framerMotionConfig);
+    }
+  }, [coinPositionX, coinPositionY, coinPositionZ, props.isCollected]);
+
+  useFrame(() => {
+    if (!group.current) return;
+    group.current!.position.x = coinPositionX.get();
+    group.current!.position.y = coinPositionY.get();
+    group.current!.position.z = coinPositionZ.get();
+  });
+
   if (status === 'idle') {
     return null;
   }
@@ -37,6 +58,7 @@ export function Meat(props: JSX.IntrinsicElements['group']) {
       userData={{
         type: 'meat',
         award: 20,
+        itemId: props.itemId,
       }}
     >
       <group ref={group} {...rest} dispose={null}>

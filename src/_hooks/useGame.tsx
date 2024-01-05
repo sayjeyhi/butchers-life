@@ -6,6 +6,7 @@ const NB_ENEMIES = 3;
 interface GameObject {
   id: number;
   position: [number, number, number];
+  isCollected: boolean;
 }
 
 interface LeaderBoardEntry {
@@ -16,6 +17,7 @@ interface LeaderBoardEntry {
 interface GameState {
   status: 'idle' | 'not-started' | 'playing' | 'game-over' | 'paused';
   timer: number;
+  knifes: GameObject[];
   enemies: GameObject[];
   coins: GameObject[];
   meats: GameObject[];
@@ -32,6 +34,7 @@ interface GameState {
 function randomPosition(i: number): GameObject {
   return {
     id: i,
+    isCollected: false,
     position: [Math.random() * 10 - 5, 0.5, Math.random() * 10 - 5],
   };
 }
@@ -46,6 +49,7 @@ const initialState: GameState = {
   enemies: randomPositions(NB_ENEMIES),
   coins: randomPositions(10),
   meats: randomPositions(10),
+  knifes: randomPositions(10),
   showBomb: false,
   leaderBoard: [],
   playerPosition: 'center',
@@ -75,6 +79,7 @@ type GameCollectOrHitAction = {
     type: 'coin' | 'meat' | 'knife' | 'enemy';
     award: number;
     damage: number;
+    itemId: number;
   };
 };
 
@@ -96,6 +101,8 @@ type GameAction =
 
 const GameStateContext = createContext(initialState);
 const GameStateDispatchContext = createContext<Dispatch<GameAction> | undefined>(undefined);
+
+const collectAudio = new Audio('/audios/collectcoin-6075.mp3');
 
 function gameReducer(state: GameState, action: GameAction): GameState {
   if (action.type === 'start') {
@@ -169,6 +176,15 @@ function gameReducer(state: GameState, action: GameAction): GameState {
     if (action.payload.type === 'coin') {
       return {
         ...state,
+        coins: state.coins.map((coin) => {
+          if (coin.id === action.payload.itemId) {
+            return {
+              ...coin,
+              isCollected: true,
+            };
+          }
+          return coin;
+        }),
         achievedAward: state.achievedAward + action.payload.award,
         achievedCoins: state.achievedCoins++,
       };
@@ -176,6 +192,15 @@ function gameReducer(state: GameState, action: GameAction): GameState {
     if (action.payload.type === 'knife') {
       return {
         ...state,
+        knifes: state.knifes.map((knife) => {
+          if (knife.id === action.payload.itemId) {
+            return {
+              ...knife,
+              isCollected: true,
+            };
+          }
+          return knife;
+        }),
         achievedAward: state.achievedAward + action.payload.award,
         achievedKnifes: state.achievedKnifes++,
       };
@@ -183,9 +208,25 @@ function gameReducer(state: GameState, action: GameAction): GameState {
     if (action.payload.type === 'meat') {
       return {
         ...state,
+        meats: state.meats.map((meat) => {
+          if (meat.id === action.payload.itemId) {
+            return {
+              ...meat,
+              isCollected: true,
+            };
+          }
+          return meat;
+        }),
         achievedAward: state.achievedAward + action.payload.award,
         achievedMeats: state.achievedMeats++,
       };
+    }
+
+    if (action.payload.type === 'enemy') {
+      console.log('enemy hit', action.payload.damage);
+    } else {
+      collectAudio.currentTime = 0;
+      collectAudio.play();
     }
   }
 

@@ -7,6 +7,7 @@ import { TwoD } from './2D';
 import { ThreeD } from './3D';
 import { Suspense } from 'react';
 import * as THREE from 'three';
+import { DEBUG_MODE } from './constants.ts';
 
 function App() {
   return (
@@ -25,7 +26,7 @@ function App() {
         <color attach="background" args={['#333']} />
         <fog attach={'fog'} args={['#333', 14, 40]} />
         <Suspense fallback={null}>
-          <Physics gravity={[0, 0, 0]} debug interpolate={false} colliders={false}>
+          <Physics gravity={[0, 0, 0]} debug={DEBUG_MODE} interpolate={false} colliders={false}>
             <ThreeD />
           </Physics>
         </Suspense>
