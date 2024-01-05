@@ -5,14 +5,37 @@ import { RigidBody } from '@react-three/rapier';
 
 export function Knife(props: JSX.IntrinsicElements['group']) {
   const group = useRef(null);
+  const rigid = useRef(null);
   const { nodes, materials, animations } = useGLTF('/models/knife-final-2.glb');
   const { actions } = useAnimations(animations, group);
 
-  useMoveItemOnRoad({ ref: group.current, animation: actions['jump']!, effectiveTimeScale: 0.4 });
+  const { 'position-x': posX, 'position-y': posY, 'position-z': posZ, ...rest } = props;
+  useMoveItemOnRoad({
+    ref: group.current,
+    animation: actions['jump']!,
+    name: 'knife',
+    effectiveTimeScale: 0.4,
+    rigidBody: rigid.current!,
+    initialObjectPosX: posX,
+    initialObjectPosY: posY,
+    initialObjectPosZ: posZ,
+  });
 
   return (
-    <RigidBody colliders="trimesh" type="fixed">
-      <group ref={group} {...props} dispose={null}>
+    <RigidBody
+      ref={rigid}
+      type="dynamic"
+      colliders="trimesh"
+      linearDamping={2}
+      // position={[posX, posY, posZ]}
+      lockRotations
+      sensor
+      userData={{
+        type: 'knife',
+        award: 16,
+      }}
+    >
+      <group ref={group} {...rest} dispose={null}>
         <group name="Scene">
           <group
             name="Plane001ss"

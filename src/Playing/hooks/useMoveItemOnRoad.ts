@@ -1,21 +1,32 @@
 import { useEffect } from 'react';
-import { useFrame } from '@react-three/fiber';
-import { SCROLL_SPEED } from '../../constants.ts';
 import { useGame } from '../../_hooks/useGame.tsx';
 import { AnimationAction } from 'three';
+import { useMoveRigidBody } from './useMoveRigidBody.ts';
 
 export const useMoveItemOnRoad = ({
   ref,
   animation,
+  name = '',
   sticky = false,
   effectiveTimeScale = 1.5,
+  rigidBody,
+  initialObjectPosX,
+  initialObjectPosY,
+  initialObjectPosZ,
 }: {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ref?: any;
   animation?: AnimationAction;
   sticky?: boolean;
   effectiveTimeScale?: number;
+  name?: string;
+  rigidBody?: any;
+  initialObjectPosX?: number;
+  initialObjectPosY?: number;
+  initialObjectPosZ?: number;
 }) => {
+  useMoveRigidBody({ ref, sticky, rigidBody, name, initialObjectPosX, initialObjectPosY, initialObjectPosZ });
+
   const { status } = useGame();
 
   useEffect(() => {
@@ -28,11 +39,5 @@ export const useMoveItemOnRoad = ({
 
     animation.fadeIn(0.1).play();
     animation.setEffectiveTimeScale(effectiveTimeScale);
-  }, [animation, status]);
-
-  useFrame((_, delta) => {
-    if (sticky || status === 'idle' || status === 'paused' || !ref) return;
-
-    ref.position.z -= SCROLL_SPEED * delta;
-  });
+  }, [animation, effectiveTimeScale, status]);
 };

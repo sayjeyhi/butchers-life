@@ -1,22 +1,31 @@
 import { Canvas } from '@react-three/fiber';
 // import { Bloom, EffectComposer } from '@react-three/postprocessing';
-import { Physics } from '@react-three/rapier';
+import { CuboidCollider, Physics } from '@react-three/rapier';
 
 import { GameProvider } from './_hooks/useGame';
 import { TwoD } from './2D';
 import { ThreeD } from './3D';
 import { Suspense } from 'react';
+import * as THREE from 'three';
 
 function App() {
   return (
     <GameProvider>
       <TwoD />
 
-      <Canvas shadows dpr={[1, 1.5]} camera={{ position: [0, 0.73, 20], fov: 10, near: 2 }}>
+      <Canvas
+        onCreated={({ gl }) => {
+          gl.shadowMap.enabled = true;
+          gl.shadowMap.type = THREE.PCFSoftShadowMap;
+        }}
+        shadows
+        dpr={[1, 1.5]}
+        camera={{ position: [0, 0.73, 20], fov: 10, near: 2 }}
+      >
         <color attach="background" args={['#333']} />
         <fog attach={'fog'} args={['#333', 14, 40]} />
         <Suspense fallback={null}>
-          <Physics gravity={[0, -60, 0]}>
+          <Physics gravity={[0, 0, 0]} debug interpolate={false} colliders={false}>
             <ThreeD />
           </Physics>
         </Suspense>

@@ -15,7 +15,7 @@ import { useKeyboard } from './_hooks/useKeyboard.ts';
 
 export const ThreeD = () => {
   useKeyboard();
-  const player = useRef();
+  const player = useRef(null);
   const { enemies, status, showBomb, coins, meats } = useGame();
 
   return (
@@ -36,25 +36,17 @@ export const ThreeD = () => {
           const column = index % ENEMY_COLUMNS;
           const row = Math.floor(index / ENEMY_COLUMNS);
           const xPos = column * ENEMY_SPACE_COLUMN - ((ENEMY_COLUMNS - 1) * ENEMY_SPACE_COLUMN) / 2;
-          return (
-            <group key={index} position-z={-15 - row * ENEMY_SPACE_ROW} position-x={xPos}>
-              <Ghost scale={0.09} />
-            </group>
-          );
+          return <Ghost scale={0.09} key={index} position-z={-15 - row * ENEMY_SPACE_ROW} position-x={xPos} />;
         })}
         {coins.map((_, index) => (
-          <group key={index} position-z={20 + index * COIN_SPACE} position-x={-0.32} layers={1}>
-            <Coin scale={0.09} />
-          </group>
+          <Coin scale={0.09} key={index} position-z={20 + index * COIN_SPACE} position-x={-0.32} layers={1} />
         ))}
         {meats.map((_, index) => (
-          <group key={index} position-z={30 + index * COIN_SPACE} position-x={0.32}>
-            <Meat scale={0.06} />
-          </group>
+          <Meat scale={0.06} key={index} position-z={30 + index * COIN_SPACE} position-x={0.32} />
         ))}
 
-        <Grave position-y={0} position-z={23} scale={0.08} />
-        <Knife position-y={0} position-z={20} scale={0.08} />
+        <Knife position-y={0} position-z={18} scale={0.08} />
+        <Grave position-y={0} position-z={26} scale={0.08} />
         <Spider position-y={0} position-z={15} position-x={0.32} scale={0.19} />
         <Butcher group={player} scale={0.09} />
       </group>

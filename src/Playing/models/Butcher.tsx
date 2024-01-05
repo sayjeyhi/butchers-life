@@ -1,5 +1,5 @@
 import { useAnimations, useGLTF, useFBX } from '@react-three/drei';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useGame } from '../../_hooks/useGame.tsx';
 import { animate, useMotionValue } from 'framer-motion';
 import { useFrame } from '@react-three/fiber';
@@ -7,6 +7,7 @@ import { GLTF } from 'three-stdlib';
 import * as THREE from 'three';
 import { framerMotionConfig } from '../../constants.ts';
 import { RigidBody } from '@react-three/rapier';
+import { useMoveRigidBody } from '../hooks/useMoveRigidBody.ts';
 
 type GLTFResult = GLTF & {
   nodes: {
@@ -29,6 +30,7 @@ type GLTFResult = GLTF & {
 };
 
 export function Butcher({ group, ...props }: any) {
+  const rigid = useRef(null);
   const { nodes, materials } = useGLTF('/models/butcher.glb') as GLTFResult;
 
   const playerPositionX = useMotionValue(0);
@@ -136,17 +138,33 @@ export function Butcher({ group, ...props }: any) {
   }, [playerPositionZ, status]);
 
   useFrame(() => {
-    group.current.position.x = playerPositionX.get();
-    group.current.position.y = playerPositionY.get();
-    group.current.position.z = playerPositionZ.get();
+    // group.current.position.x = playerPositionX.get();
+    // group.current.position.y = playerPositionY.get();
+    // group.current.position.z = playerPositionZ.get();
+
+    rigid.current!.setTranslation(
+      {
+        x: playerPositionX.get(),
+        y: playerPositionY.get(),
+        z: playerPositionZ.get(),
+      },
+      true,
+    );
   });
 
   return (
     <RigidBody
+      ref={rigid}
       type="dynamic"
-      onCollisionEnter={() => {
-        console.log('collision');
+      colliders="cuboid"
+      linearDamping={12}
+      onCollisionEnter={({ other }) => {
+        console.log('collided onCollisionEnter', other.rigidBody?.userData);
       }}
+      onIntersectionEnter={({ other }) => {
+        console.log('collided onIntersectionEnter', other.rigidBody?.userData);
+      }}
+      lockRotations
     >
       <group ref={group} {...props} dispose={null}>
         <group name="Scene">

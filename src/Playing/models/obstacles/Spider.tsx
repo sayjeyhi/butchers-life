@@ -5,14 +5,35 @@ import { RigidBody } from '@react-three/rapier';
 
 export function Spider(props: JSX.IntrinsicElements['group']) {
   const group = useRef(null);
+  const rigid = useRef(null);
   const { nodes, materials, animations } = useGLTF('/models/spider-with-web-final-12.glb');
   const { actions } = useAnimations(animations, group);
 
-  useMoveItemOnRoad({ ref: group.current!, animation: actions['watch']! });
+  const { 'position-x': posX, 'position-y': posY, 'position-z': posZ, ...rest } = props;
+  useMoveItemOnRoad({
+    ref: group.current!,
+    animation: actions['watch']!,
+    name: 'spider',
+    rigidBody: rigid.current!,
+    initialObjectPosX: posX,
+    initialObjectPosY: posY,
+    initialObjectPosZ: posZ,
+  });
 
   return (
-    <RigidBody colliders="trimesh" type="fixed">
-      <group ref={group} {...props} dispose={null}>
+    <RigidBody
+      ref={rigid}
+      type="dynamic"
+      colliders="cuboid"
+      linearDamping={12}
+      lockRotations
+      sensor
+      userData={{
+        type: 'spider',
+        damage: 60,
+      }}
+    >
+      <group ref={group} {...rest} dispose={null}>
         <group name="Scene">
           <group name="Head" position={[-0.086, 0.299, 0.21]} rotation={[-0.004, -0.44, -0.004]} scale={0.159}>
             <mesh

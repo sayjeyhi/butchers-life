@@ -5,13 +5,33 @@ import { RigidBody } from '@react-three/rapier';
 
 export function Grave(props: JSX.IntrinsicElements['group']) {
   const group = useRef(null);
+  const rigid = useRef(null);
   const { nodes, materials } = useGLTF('/models/grave-21.glb');
 
-  useMoveItemOnRoad({ ref: group.current! });
+  const { 'position-x': posX, 'position-y': posY, 'position-z': posZ, ...rest } = props;
+  useMoveItemOnRoad({
+    ref: group.current!,
+    rigidBody: rigid.current!,
+    name: 'grave',
+    initialObjectPosX: posX,
+    initialObjectPosY: posY,
+    initialObjectPosZ: posZ,
+  });
 
   return (
-    <RigidBody colliders="trimesh" type="fixed">
-      <group {...props} ref={group} dispose={null}>
+    <RigidBody
+      ref={rigid}
+      type="dynamic"
+      colliders="cuboid"
+      linearDamping={12}
+      lockRotations
+      sensor
+      userData={{
+        type: 'grave',
+        damage: 70,
+      }}
+    >
+      <group {...rest} ref={group} dispose={null}>
         <group position={[0.101, 1.532, -0.793]} rotation={[-0.069, 0, 0]} scale={0.22}>
           <mesh castShadow receiveShadow geometry={nodes.Cube110.geometry} material={materials['Material.012']} />
           <mesh castShadow receiveShadow geometry={nodes.Cube110_1.geometry} material={materials['kelelawar.003']} />

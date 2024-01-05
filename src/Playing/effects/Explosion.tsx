@@ -22,7 +22,7 @@ yellowColor.multiplyScalar(12);
 const colors = [greenColor, redColor, whiteColor, blueColor, yellowColor];
 
 const AnimatedBox = ({ scale, target, speed, color }: any) => {
-  const ref = useRef();
+  const ref = useRef(null);
   useFrame((_, delta) => {
     if (!ref.current) return;
 
