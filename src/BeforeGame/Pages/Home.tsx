@@ -9,11 +9,17 @@ export const Home = () => {
   const { account, create, exists } = useMeatAccount();
 
   const createAccount = async () => {
-    if (!isConnected) {
-      await connect();
+    try {
+      if (!isConnected) {
+        await connect();
+      }
+      await create();
+      // await fund('1000');
+    } catch (e) {
+      dispatch({
+        type: 'start',
+      });
     }
-    await create();
-    // await fund('1000');
   };
 
   return (

@@ -6,6 +6,7 @@ import { City } from './Playing/models/City.tsx';
 import { Ghost } from './Playing/models/enemies/Ghost.tsx';
 import { Grave } from './Playing/models/obstacles/Grave.tsx';
 import { Spider } from './Playing/models/obstacles/Spider.tsx';
+import { Nail } from './Playing/models/obstacles/Nail.tsx';
 import { Coin } from './Playing/models/rewards/Coin.tsx';
 import { Knife } from './Playing/models/rewards/Knife.tsx';
 import { Meat } from './Playing/models/rewards/Meat.tsx';
@@ -16,7 +17,7 @@ import { COIN_SPACE, ENEMY_COLUMNS, ENEMY_SPACE_COLUMN, GAMEBOARD_LENGTH } from 
 export const ThreeD = () => {
   useKeyboard();
   const player = useRef(null);
-  const { enemies, status, showBomb, coins, meats, knifes } = useGame();
+  const { grave, nail, spider, ghosts, status, showBomb, coins, meats, knifes } = useGame();
 
   return (
     <>
@@ -33,22 +34,21 @@ export const ThreeD = () => {
 
         {showBomb && <Explosion />}
 
-        {enemies.map((_, index) => {
+        {ghosts.map((_, index) => {
           const column = index % ENEMY_COLUMNS;
-          const row = Math.floor(index / ENEMY_COLUMNS);
           const xPos = column * ENEMY_SPACE_COLUMN - ((ENEMY_COLUMNS - 1) * ENEMY_SPACE_COLUMN) / 2;
           return <Ghost scale={0.09} key={index} position-z={-15 - _.position[2]} position-x={xPos} />;
         })}
+
         {coins.map((_, index) => (
           <Coin
             scale={0.11}
             key={index}
-            position-y={0.02}
-            position-z={20 + index * COIN_SPACE}
-            position-x={-0.32}
-            layers={1}
             itemId={coins[index].id}
             isCollected={coins[index].isCollected}
+            position-x={knifes[index].position[0]}
+            position-y={knifes[index].position[1]}
+            position-z={knifes[index].position[2] + index * COIN_SPACE}
           />
         ))}
         {meats.map((_, index) => (
@@ -57,25 +57,48 @@ export const ThreeD = () => {
             key={index}
             itemId={meats[index].id}
             isCollected={meats[index].isCollected}
-            position-y={0.02}
-            position-z={38 + index * COIN_SPACE}
-            position-x={0}
+            position-x={knifes[index].position[0]}
+            position-y={knifes[index].position[1]}
+            position-z={knifes[index].position[2] + index * COIN_SPACE}
           />
         ))}
         {knifes.map((_, index) => (
           <Knife
+            scale={0.08}
             key={index}
-            position-y={0.02}
-            position-z={18 + index * COIN_SPACE}
-            position-x={0.32}
             itemId={knifes[index].id}
             isCollected={knifes[index].isCollected}
-            scale={0.08}
+            position-x={knifes[index].position[0]}
+            position-y={knifes[index].position[1]}
+            position-z={knifes[index].position[2] + index * COIN_SPACE}
           />
         ))}
 
-        <Grave position-y={0} position-z={26} scale={0.08} />
-        <Spider position-y={0} position-z={15} position-x={0.32} scale={0.19} />
+        {grave && (
+          <Grave
+            position-x={grave.position[0]}
+            position-y={grave.position[1]}
+            position-z={grave.position[2]}
+            scale={0.08}
+          />
+        )}
+        {nail && (
+          <Nail
+            position-x={nail.position[0]}
+            position-y={nail.position[1]}
+            position-z={nail.position[2]}
+            scale={0.03}
+          />
+        )}
+        {spider && (
+          <Spider
+            position-x={spider.position[0]}
+            position-y={spider.position[1]}
+            position-z={spider.position[2]}
+            scale={0.19}
+          />
+        )}
+
         <Butcher group={player} scale={0.09} />
       </group>
     </>

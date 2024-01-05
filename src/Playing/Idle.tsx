@@ -1,8 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useGame } from '../_hooks/useGame.tsx';
 
-// const countDownItems = ['Are you ready?', 'Three', 'Two', 'One', 'Start!'];
-const countDownItems = ['Are you ready?', 'Start!'];
+const countDownItems = ['Are you ready?', 'Three', 'Two', 'One', 'Start!'];
 
 export const Idle = () => {
   const counterRef = useRef(null);

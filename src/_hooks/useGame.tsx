@@ -18,9 +18,12 @@ interface GameState {
   status: 'idle' | 'not-started' | 'playing' | 'game-over' | 'paused';
   timer: number;
   knifes: GameObject[];
-  enemies: GameObject[];
+  ghosts: GameObject[];
   coins: GameObject[];
   meats: GameObject[];
+  grave: GameObject;
+  spider: GameObject;
+  nail: GameObject;
   showBomb: boolean;
   leaderBoard: LeaderBoardEntry[];
   playerPosition: string;
@@ -32,7 +35,7 @@ interface GameState {
   lives: number;
 }
 
-function enemiesRandomPositions(count: number) {
+function ghostsRandomPositions(count: number) {
   return randomPositions(count).map((enemy) => {
     const newPosition = [...enemy.position];
     newPosition[2] = Math.abs(newPosition[2]);
@@ -55,10 +58,13 @@ function randomPositions(count: number) {
 const initialState: GameState = {
   status: 'not-started',
   timer: GAME_TIME,
-  enemies: enemiesRandomPositions(NB_ENEMIES),
+  ghosts: ghostsRandomPositions(NB_ENEMIES),
   coins: randomPositions(10),
   meats: randomPositions(10),
   knifes: randomPositions(10),
+  grave: randomPosition(0),
+  nail: randomPosition(0),
+  spider: randomPosition(0),
   showBomb: false,
   leaderBoard: [],
   playerPosition: 'center',
@@ -194,7 +200,7 @@ function gameReducer(state: GameState, action: GameAction): GameState {
       return {
         ...state,
         lives: state.lives - action.payload.damage,
-        enemies: state.enemies.map((enemy) => {
+        ghosts: state.ghosts.map((enemy) => {
           const newPosition = [...enemy.position];
           newPosition[2] = newPosition[2] - 1;
 
