@@ -31,7 +31,7 @@ export function Knife(props: JSX.IntrinsicElements['group'] & { isCollected: boo
   const coinPositionZ = useMotionValue(0);
   useEffect(() => {
     if (props.isCollected) {
-      animate(coinPositionX, -1.6, framerMotionConfig);
+      animate(coinPositionX, -1.9, framerMotionConfig);
       animate(coinPositionY, 1.12, framerMotionConfig);
       animate(coinPositionZ, 16, framerMotionConfig);
     }
