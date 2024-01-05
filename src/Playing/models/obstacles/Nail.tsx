@@ -6,6 +6,8 @@ import { useMoveItemOnRoad } from '../../hooks/useMoveItemOnRoad.ts';
 import { useGame } from '../../../_hooks/useGame.tsx';
 import { RigidBody } from '@react-three/rapier';
 import { useCollectOnCollide } from '../../hooks/useCollectOnCollide.ts';
+import { Explosion } from '../../effects/Explosion.tsx';
+import { useCollectOnCollideEnemy } from '../../hooks/useCollectOnCollideEnemy.ts';
 
 type GLTFResult = GLTF & {
   nodes: {
@@ -61,6 +63,7 @@ export function Nail(props: JSX.IntrinsicElements['group'] & { isCollected: bool
 
   const { 'position-x': posX, 'position-y': posY, 'position-z': posZ, ...rest } = props;
   useMoveItemOnRoad({
+    ref: group.current!,
     rigidBody: rigid.current!,
     name: 'nail',
     initialObjectPosX: posX,
@@ -68,7 +71,7 @@ export function Nail(props: JSX.IntrinsicElements['group'] & { isCollected: bool
     initialObjectPosZ: posZ,
   });
 
-  useCollectOnCollide({ ref: group.current, isColloid: props.isCollected });
+  useCollectOnCollideEnemy({ ref: group.current, isColloid: props.isCollected });
 
   const { status } = useGame();
 
@@ -85,11 +88,12 @@ export function Nail(props: JSX.IntrinsicElements['group'] & { isCollected: bool
       lockRotations
       sensor
       userData={{
-        isEnemy: true,
         type: 'nail',
-        damage: 70,
+        damage: 30,
+        itemId: props.itemId,
       }}
     >
+      {props.isCollected ? <Explosion scale={0.1} /> : null}
       <group ref={group} {...rest} dispose={null}>
         <group position={[-1.998, 0.911, -0.009]} rotation={[-3.139, -0.618, 0]} scale={[0.483, 0.315, 0.483]}>
           <mesh castShadow receiveShadow geometry={nodes.Circle001_1.geometry} material={materials['Material.011']} />

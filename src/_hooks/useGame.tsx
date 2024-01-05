@@ -1,4 +1,5 @@
 import { Dispatch, PropsWithChildren, createContext, useContext, useEffect, useReducer } from 'react';
+import { v4 as uuidv4 } from 'uuid';
 
 interface GameObject {
   id: number;
@@ -42,7 +43,7 @@ function ghostsRandomPositions(count: number) {
 
 function randomPosition(i: number, x: number = 0): GameObject {
   return {
-    id: i,
+    id: uuidv4(),
     isCollected: false,
     position: [x, 0, 18],
   };
@@ -71,7 +72,7 @@ const initialState: GameState = {
   achievedCoins: 0,
   achievedMeats: 0,
   achievedKnifes: 0,
-  lives: 100,
+  lives: 300,
 };
 
 type GameStartAction = { type: 'start' };
@@ -93,11 +94,10 @@ type GameChangeCharacterAnimationAction = { type: 'setCharacterAnimation'; paylo
 type GameCollectOrHitAction = {
   type: 'collect-or-hit';
   payload: {
-    type: 'coin' | 'meat' | 'knife' | 'enemy';
+    type: 'coin' | 'meat' | 'knife' | 'grave' | 'spider' | 'nail';
     award: number;
     damage: number;
     itemId: number;
-    isEnemy?: boolean;
   };
 };
 
@@ -220,8 +220,25 @@ function gameReducer(state: GameState, action: GameAction): GameState {
       collectAudio.currentTime = 0;
       collectAudio.play();
     }
-    if (action.payload.isEnemy) {
-      console.log('payload', action.payload);
+
+    if (action.payload.type === 'coin' || action.payload.type === 'meat' || action.payload.type === 'knife') {
+      const item = `${action.payload.type}s` as const;
+      return {
+        ...state,
+        [item]: state[item].map((coin) => {
+          if (coin.id === action.payload.itemId) {
+            return {
+              ...coin,
+              isCollected: true,
+            };
+          }
+          return coin;
+        }),
+        achievedAward: state.achievedAward + action.payload.award,
+        achievedCoins: state.achievedCoins++,
+      };
+    } else if (action.payload.type === 'grave' || action.payload.type === 'spider' || action.payload.type === 'nail') {
+      const item = `${action.payload.type}s` as const;
       return {
         ...state,
         lives: state.lives - action.payload.damage,
@@ -234,57 +251,16 @@ function gameReducer(state: GameState, action: GameAction): GameState {
             position: newPosition,
           };
         }),
-      };
-    } else if (action.payload.type === 'coin') {
-      console.log('payload', action.payload);
-      return {
-        ...state,
-        coins: state.coins.map((coin) => {
-          if (coin.id === action.payload.itemId) {
+        [item]: state[item].map((item) => {
+          if (item.id === action.payload.itemId) {
             return {
-              ...coin,
+              ...item,
               isCollected: true,
             };
           }
-          return coin;
+          return item;
         }),
-        achievedAward: state.achievedAward + action.payload.award,
-        achievedCoins: state.achievedCoins++,
       };
-    } else if (action.payload.type === 'knife') {
-      return {
-        ...state,
-        knifes: state.knifes.map((knife) => {
-          if (knife.id === action.payload.itemId) {
-            return {
-              ...knife,
-              isCollected: true,
-            };
-          }
-          return knife;
-        }),
-        achievedAward: state.achievedAward + action.payload.award,
-        achievedKnifes: state.achievedKnifes++,
-      };
-    } else if (action.payload.type === 'meat') {
-      return {
-        ...state,
-        meats: state.meats.map((meat) => {
-          if (meat.id === action.payload.itemId) {
-            return {
-              ...meat,
-              isCollected: true,
-            };
-          }
-          return meat;
-        }),
-        achievedAward: state.achievedAward + action.payload.award,
-        achievedMeats: state.achievedMeats++,
-      };
-    }
-
-    if (action.payload.type === 'enemy') {
-      console.log('enemy hit', action.payload.damage);
     }
   }
 

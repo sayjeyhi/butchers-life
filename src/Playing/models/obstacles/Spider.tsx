@@ -3,7 +3,8 @@ import { useGLTF, useAnimations } from '@react-three/drei';
 import { useMoveItemOnRoad } from '../../hooks/useMoveItemOnRoad.ts';
 import { RigidBody } from '@react-three/rapier';
 import { useGame } from '../../../_hooks/useGame.tsx';
-import { useCollectOnCollide } from '../../hooks/useCollectOnCollide.ts';
+import { Explosion } from '../../effects/Explosion.tsx';
+import { useCollectOnCollideEnemy } from '../../hooks/useCollectOnCollideEnemy.ts';
 
 export function Spider(props: JSX.IntrinsicElements['group'] & { isCollected: boolean; itemId: number }) {
   const group = useRef(null);
@@ -23,7 +24,7 @@ export function Spider(props: JSX.IntrinsicElements['group'] & { isCollected: bo
   });
   const { status } = useGame();
 
-  useCollectOnCollide({ ref: group.current, isColloid: props.isCollected });
+  useCollectOnCollideEnemy({ ref: group.current, isColloid: props.isCollected });
 
   if (status === 'idle') {
     return null;
@@ -38,11 +39,12 @@ export function Spider(props: JSX.IntrinsicElements['group'] & { isCollected: bo
       lockRotations
       sensor
       userData={{
-        isEnemy: true,
         type: 'spider',
-        damage: 60,
+        damage: 30,
+        itemId: props.itemId,
       }}
     >
+      {props.isCollected ? <Explosion scale={0.1} /> : null}
       <group ref={group} {...rest} dispose={null}>
         <group name="Scene">
           <group name="Head" position={[-0.086, 0.299, 0.21]} rotation={[-0.004, -0.44, -0.004]} scale={0.159}>

@@ -19,7 +19,7 @@ export const ThreeD = () => {
   const player = useRef(null);
   const { graves, nails, spiders, ghosts, status, showBomb, coins, meats, knifes } = useGame();
 
-  if (status === 'game-over') return null;
+  if (status === 'game-over' || status === 'not-started') return null;
 
   return (
     <>
@@ -33,8 +33,6 @@ export const ThreeD = () => {
         <City position-z={status === 'not-started' ? 80 : 0} />
         <City position-z={status === 'not-started' ? 80 : -GAMEBOARD_LENGTH} />
         <City position-z={status === 'not-started' ? 80 : GAMEBOARD_LENGTH} />
-
-        {showBomb && <Explosion />}
 
         {ghosts.map((_, index) => {
           const column = index % ENEMY_COLUMNS;
@@ -66,7 +64,7 @@ export const ThreeD = () => {
         ))}
         {knifes.map((_, index) => (
           <Knife
-            scale={0.08}
+            scale={0.04}
             key={index}
             itemId={knifes[index].id}
             isCollected={knifes[index].isCollected}

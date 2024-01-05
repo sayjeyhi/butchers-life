@@ -24,11 +24,11 @@ export const useKeyboard = () => {
         } else if (e.key === 'Escape') {
           dispatch({ type: 'pause' });
         }
-      } else if (status === 'paused') {
+      } else if (status === 'paused' && e.key === ' ') {
         dispatch({ type: 'resume' });
-      } else if (status === 'not-started') {
+      } else if (status === 'not-started' && e.key === ' ') {
         dispatch({ type: 'start' });
-      } else if (status === 'idle') {
+      } else if (status === 'idle' && e.key === ' ') {
         dispatch({ type: 'play' });
       }
     };

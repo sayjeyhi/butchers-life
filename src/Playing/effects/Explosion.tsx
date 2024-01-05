@@ -36,11 +36,11 @@ const AnimatedBox = ({ scale, target, speed, color }: any) => {
 };
 
 export const Explosion = ({
-  nb = 100,
+  nb = 50,
   position = new Vector3(0, 0, 0),
-  limitX = 5,
-  limitY = 10,
-  limitZ = 10,
+  limitX = 0.4,
+  limitY = 0.4,
+  limitZ = 0.4,
   scale = 0.4,
   multicolor = true,
 }) => {

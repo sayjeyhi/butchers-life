@@ -2,7 +2,7 @@ import { useGame } from '../_hooks/useGame.tsx';
 import { SettingModal } from './SettingModal.tsx';
 
 export const TopScore = () => {
-  const { achievedCoins, achievedAward, timer, dispatch, status } = useGame();
+  const { lives, achievedCoins, achievedAward, timer, dispatch, status } = useGame();
 
   const handleShowSettings = () => {
     dispatch({ type: 'pause' });
@@ -27,6 +27,10 @@ export const TopScore = () => {
         </div>
 
         <div>
+          <div className="pointer-events-auto mt-2 flex cursor-pointer flex-row items-center gap-3 rounded-2xl bg-[rgba(255,255,255,0.2)] p-2 pl-5 pr-8 text-2xl font-bold text-white backdrop-blur">
+            <img src="/images/heart.png" alt="Timer icon" className="absolute -right-2 -top-2 w-16" />
+            {lives}
+          </div>
           <button
             onClick={handleShowSettings}
             className="pointer-events-auto mt-2 flex cursor-pointer flex-row items-center gap-3 rounded-2xl bg-[rgba(255,255,255,0.2)] p-2 pl-5 pr-16 text-2xl font-bold text-white backdrop-blur"

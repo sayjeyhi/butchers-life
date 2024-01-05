@@ -3,7 +3,8 @@ import { useGLTF } from '@react-three/drei';
 import { useMoveItemOnRoad } from '../../hooks/useMoveItemOnRoad.ts';
 import { RigidBody } from '@react-three/rapier';
 import { useGame } from '../../../_hooks/useGame.tsx';
-import { useCollectOnCollide } from '../../hooks/useCollectOnCollide.ts';
+import { Explosion } from '../../effects/Explosion.tsx';
+import { useCollectOnCollideEnemy } from '../../hooks/useCollectOnCollideEnemy.ts';
 
 export function Grave(props: JSX.IntrinsicElements['group'] & { isCollected: boolean; itemId: number }) {
   const group = useRef(null);
@@ -20,7 +21,7 @@ export function Grave(props: JSX.IntrinsicElements['group'] & { isCollected: boo
     initialObjectPosZ: posZ,
   });
 
-  useCollectOnCollide({ ref: group.current, isColloid: props.isCollected });
+  useCollectOnCollideEnemy({ ref: group.current, isColloid: props.isCollected });
 
   const { status } = useGame();
 
@@ -37,11 +38,12 @@ export function Grave(props: JSX.IntrinsicElements['group'] & { isCollected: boo
       lockRotations
       sensor
       userData={{
-        isEnemy: true,
         type: 'grave',
-        damage: 70,
+        damage: 25,
+        itemId: props.itemId,
       }}
     >
+      {props.isCollected ? <Explosion scale={0.1} /> : null}
       <group {...rest} ref={group} dispose={null}>
         <group position={[0.101, 1.532, -0.793]} rotation={[-0.069, 0, 0]} scale={0.22}>
           <mesh castShadow receiveShadow geometry={nodes.Cube110.geometry} material={materials['Material.012']} />
