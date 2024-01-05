@@ -1,17 +1,17 @@
 import { Environment, OrbitControls } from '@react-three/drei';
 import { useRef } from 'react';
-import { GAMEBOARD_LENGTH, ENEMY_COLUMNS, ENEMY_SPACE_COLUMN, ENEMY_SPACE_ROW, COIN_SPACE } from './constants';
-import { useGame } from './_hooks/useGame.tsx';
 import { Explosion } from './Playing/effects/Explosion.tsx';
-import { City } from './Playing/models/City.tsx';
-import { Coin } from './Playing/models/rewards/Coin.tsx';
-import { Meat } from './Playing/models/rewards/Meat.tsx';
-import { Knife } from './Playing/models/rewards/Knife.tsx';
-import { Spider } from './Playing/models/obstacles/Spider.tsx';
-import { Grave } from './Playing/models/obstacles/Grave.tsx';
 import { Butcher } from './Playing/models/Butcher.tsx';
+import { City } from './Playing/models/City.tsx';
 import { Ghost } from './Playing/models/enemies/Ghost.tsx';
+import { Grave } from './Playing/models/obstacles/Grave.tsx';
+import { Spider } from './Playing/models/obstacles/Spider.tsx';
+import { Coin } from './Playing/models/rewards/Coin.tsx';
+import { Knife } from './Playing/models/rewards/Knife.tsx';
+import { Meat } from './Playing/models/rewards/Meat.tsx';
+import { useGame } from './_hooks/useGame.tsx';
 import { useKeyboard } from './_hooks/useKeyboard.ts';
+import { COIN_SPACE, ENEMY_COLUMNS, ENEMY_SPACE_COLUMN, GAMEBOARD_LENGTH } from './constants';
 
 export const ThreeD = () => {
   useKeyboard();

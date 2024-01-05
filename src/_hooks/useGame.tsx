@@ -33,12 +33,12 @@ interface GameState {
 }
 
 function enemiesRandomPositions(count: number) {
-  return randomPositions(count).map(enemy => {
+  return randomPositions(count).map((enemy) => {
     const newPosition = [...enemy.position];
     newPosition[2] = Math.abs(newPosition[2]);
-    return {...enemy, position: newPosition};
+    return { ...enemy, position: newPosition };
   });
-} 
+}
 
 function randomPosition(i: number): GameObject {
   return {
@@ -190,21 +190,22 @@ function gameReducer(state: GameState, action: GameAction): GameState {
       collectAudio.play();
     }
     if (action.payload.isEnemy) {
-      console.log("payload", action.payload)
+      console.log('payload', action.payload);
       return {
         ...state,
         lives: state.lives - action.payload.damage,
         enemies: state.enemies.map((enemy) => {
           const newPosition = [...enemy.position];
           newPosition[2] = newPosition[2] - 1;
-          
+
           return {
-            ...enemy, position: newPosition
+            ...enemy,
+            position: newPosition,
           };
         }),
       };
-    }
-    else if (action.payload.type === 'coin') {
+    } else if (action.payload.type === 'coin') {
+      console.log('payload', action.payload);
       return {
         ...state,
         coins: state.coins.map((coin) => {
@@ -219,8 +220,7 @@ function gameReducer(state: GameState, action: GameAction): GameState {
         achievedAward: state.achievedAward + action.payload.award,
         achievedCoins: state.achievedCoins++,
       };
-    }
-    else if (action.payload.type === 'knife') {
+    } else if (action.payload.type === 'knife') {
       return {
         ...state,
         knifes: state.knifes.map((knife) => {
@@ -235,8 +235,7 @@ function gameReducer(state: GameState, action: GameAction): GameState {
         achievedAward: state.achievedAward + action.payload.award,
         achievedKnifes: state.achievedKnifes++,
       };
-    }
-    else if (action.payload.type === 'meat') {
+    } else if (action.payload.type === 'meat') {
       return {
         ...state,
         meats: state.meats.map((meat) => {

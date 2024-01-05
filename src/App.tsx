@@ -1,12 +1,12 @@
 import { Canvas } from '@react-three/fiber';
 // import { Bloom, EffectComposer } from '@react-three/postprocessing';
-import { CuboidCollider, Physics } from '@react-three/rapier';
-
+import { Physics } from '@react-three/rapier';
 import { GameProvider } from './_hooks/useGame';
-import { TwoD } from './2D';
-import { ThreeD } from './3D';
+
 import { Suspense } from 'react';
 import * as THREE from 'three';
+import { TwoD } from './2D';
+import { ThreeD } from './3D';
 import { DEBUG_MODE } from './constants.ts';
 
 function App() {

@@ -3,6 +3,10 @@ import { useGame } from '../_hooks/useGame.tsx';
 
 export const Result = () => {
   const { dispatch } = useGame();
+  // const { fund } = useMeatAccount();
+  // useEffect(() => {
+  //   fund(`${achievedCoins}`);
+  // }, [achievedCoins, fund]);
 
   return (
     <div className="nice-bg flex h-full flex-col items-center justify-center gap-8 rounded-2xl">

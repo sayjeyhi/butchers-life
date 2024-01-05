@@ -9,5 +9,3 @@ export const appEnv = {
   ADMIN_ACCOUNT_PUBLIC_KEY: import.meta.env.APP_ADMIN_ACCOUNT_PUBLIC_KEY ?? '0',
   ADMIN_ACCOUNT_PRIVATE_KEY: import.meta.env.APP_ADMIN_ACCOUNT_PRIVATE_KEY ?? '0',
 };
-
-console.log('appEnv', appEnv);

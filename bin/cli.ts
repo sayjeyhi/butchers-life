@@ -4,6 +4,7 @@ import { fund } from './fund';
 
 import { defineCommand, runMain } from 'citty';
 import { createPrincipalNamespace } from './ns';
+import { env } from './env';
 
 const deployCommand = defineCommand({
   meta: {
@@ -63,6 +64,33 @@ const fundCommand = defineCommand({
   },
 });
 
+const fundAdminCommand = defineCommand({
+  meta: {
+    name: 'fund-admin',
+    description: 'Fund Admin account with amount or create account and fund it',
+  },
+  args: {
+    amount: {
+      type: 'positional',
+      name: 'amount',
+      description: 'Amount',
+    },
+    preflight: {
+      type: 'boolean',
+      name: 'preflight',
+      description: 'Preflight',
+      defaultValue: false,
+    },
+  },
+  run: async ({ args }) => {
+    console.log(args);
+    const { amount, preflight } = args;
+    const recipient = env.APP_ADMIN_ACCOUNT;
+    console.log('Funding admin account...', recipient, amount);
+    await fund(recipient, amount, preflight);
+  },
+});
+
 const createPrincipalCommand = defineCommand({
   meta: {
     name: 'create-ns',
@@ -80,7 +108,8 @@ const main = defineCommand({
   subCommands: {
     deploy: deployCommand,
     fund: fundCommand,
-    'create-ns': createPrincipalCommand,
+    fundAdmin: fundAdminCommand,
+    createNs: createPrincipalCommand,
   },
 });
 
