@@ -8,11 +8,13 @@ export const useMoveItemOnRoad = ({
   ref,
   animation,
   sticky = false,
+  effectiveTimeScale = 1.5,
 }: {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ref?: any;
   animation?: AnimationAction;
   sticky?: boolean;
+  effectiveTimeScale?: number;
 }) => {
   const { status } = useGame();
 
@@ -25,11 +27,11 @@ export const useMoveItemOnRoad = ({
     }
 
     animation.fadeIn(0.1).play();
-    animation.setEffectiveTimeScale(1.5);
+    animation.setEffectiveTimeScale(effectiveTimeScale);
   }, [animation, status]);
 
   useFrame((_, delta) => {
-    if (sticky || status === 'idle' || !ref) return;
+    if (sticky || status === 'idle' || status === 'paused' || !ref) return;
 
     ref.position.z -= SCROLL_SPEED * delta;
   });

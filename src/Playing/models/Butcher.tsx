@@ -6,6 +6,7 @@ import { useFrame } from '@react-three/fiber';
 import { GLTF } from 'three-stdlib';
 import * as THREE from 'three';
 import { framerMotionConfig } from '../../constants.ts';
+import { RigidBody } from '@react-three/rapier';
 
 type GLTFResult = GLTF & {
   nodes: {
@@ -141,51 +142,58 @@ export function Butcher({ group, ...props }: any) {
   });
 
   return (
-    <group ref={group} {...props} dispose={null}>
-      <group name="Scene">
-        <group name="Armature" scale={0.01}>
-          <group name="0">
-            <skinnedMesh
-              name="0002"
-              geometry={nodes['0002'].geometry}
-              material={materials['hairs.001']}
-              skeleton={nodes['0002'].skeleton}
-            />
-            <skinnedMesh
-              name="0002_1"
-              geometry={nodes['0002_1'].geometry}
-              material={materials['body.001']}
-              skeleton={nodes['0002_1'].skeleton}
-            />
-            <skinnedMesh
-              name="0002_2"
-              geometry={nodes['0002_2'].geometry}
-              material={materials['eye.001']}
-              skeleton={nodes['0002_2'].skeleton}
-            />
-            <skinnedMesh
-              name="0002_3"
-              geometry={nodes['0002_3'].geometry}
-              material={materials['noose.001']}
-              skeleton={nodes['0002_3'].skeleton}
-            />
-            <skinnedMesh
-              name="0002_4"
-              geometry={nodes['0002_4'].geometry}
-              material={materials['jean.001']}
-              skeleton={nodes['0002_4'].skeleton}
-            />
-            <skinnedMesh
-              name="0002_5"
-              geometry={nodes['0002_5'].geometry}
-              material={materials['shirt.001']}
-              skeleton={nodes['0002_5'].skeleton}
-            />
+    <RigidBody
+      type="dynamic"
+      onCollisionEnter={() => {
+        console.log('collision');
+      }}
+    >
+      <group ref={group} {...props} dispose={null}>
+        <group name="Scene">
+          <group name="Armature" scale={0.01}>
+            <group name="0">
+              <skinnedMesh
+                name="0002"
+                geometry={nodes['0002'].geometry}
+                material={materials['hairs.001']}
+                skeleton={nodes['0002'].skeleton}
+              />
+              <skinnedMesh
+                name="0002_1"
+                geometry={nodes['0002_1'].geometry}
+                material={materials['body.001']}
+                skeleton={nodes['0002_1'].skeleton}
+              />
+              <skinnedMesh
+                name="0002_2"
+                geometry={nodes['0002_2'].geometry}
+                material={materials['eye.001']}
+                skeleton={nodes['0002_2'].skeleton}
+              />
+              <skinnedMesh
+                name="0002_3"
+                geometry={nodes['0002_3'].geometry}
+                material={materials['noose.001']}
+                skeleton={nodes['0002_3'].skeleton}
+              />
+              <skinnedMesh
+                name="0002_4"
+                geometry={nodes['0002_4'].geometry}
+                material={materials['jean.001']}
+                skeleton={nodes['0002_4'].skeleton}
+              />
+              <skinnedMesh
+                name="0002_5"
+                geometry={nodes['0002_5'].geometry}
+                material={materials['shirt.001']}
+                skeleton={nodes['0002_5'].skeleton}
+              />
+            </group>
+            <primitive object={nodes.mixamorigHips} />
           </group>
-          <primitive object={nodes.mixamorigHips} />
         </group>
       </group>
-    </group>
+    </RigidBody>
   );
 }
 

@@ -18,7 +18,6 @@ export const Idle = () => {
       const showNextItem = () => {
         if (index < countDownItems.length) {
           setCurrentItem(countDownItems[index]);
-
           index++;
 
           setTimeout(

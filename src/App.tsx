@@ -16,7 +16,7 @@ function App() {
         <color attach="background" args={['#333']} />
         <fog attach={'fog'} args={['#333', 14, 40]} />
         <Suspense fallback={null}>
-          <Physics>
+          <Physics gravity={[0, -60, 0]}>
             <ThreeD />
           </Physics>
         </Suspense>

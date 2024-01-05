@@ -25,7 +25,7 @@ export const useKeyboard = () => {
           dispatch({ type: 'pause' });
         }
       } else if (status === 'paused') {
-        dispatch({ type: 'start' });
+        dispatch({ type: 'resume' });
       } else if (status === 'not-started') {
         dispatch({ type: 'start' });
       } else if (status === 'idle') {
