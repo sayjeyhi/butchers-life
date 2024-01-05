@@ -173,6 +173,11 @@ function gameReducer(state: GameState, action: GameAction): GameState {
   }
 
   if (action.type === 'collect-or-hit') {
+    // play sound
+    if (['coin', 'knife', 'meat'].includes(action.payload.type)) {
+      collectAudio.currentTime = 0;
+      collectAudio.play();
+    }
     if (action.payload.type === 'coin') {
       return {
         ...state,
@@ -224,9 +229,6 @@ function gameReducer(state: GameState, action: GameAction): GameState {
 
     if (action.payload.type === 'enemy') {
       console.log('enemy hit', action.payload.damage);
-    } else {
-      collectAudio.currentTime = 0;
-      collectAudio.play();
     }
   }
 
