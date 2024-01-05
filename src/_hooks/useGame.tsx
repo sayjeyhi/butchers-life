@@ -23,6 +23,10 @@ interface GameState {
   leaderBoard: LeaderBoardEntry[];
   playerPosition: string;
   playerAnimation: string;
+  achievedAward: number;
+  achievedCoins: number;
+  achievedMeats: number;
+  achievedKnifes: number;
 }
 
 function randomPosition(i: number): GameObject {
@@ -46,6 +50,10 @@ const initialState: GameState = {
   leaderBoard: [],
   playerPosition: 'center',
   playerAnimation: 'idle',
+  achievedAward: 0,
+  achievedCoins: 0,
+  achievedMeats: 0,
+  achievedKnifes: 0,
 };
 
 type GameStartAction = { type: 'start' };
@@ -61,6 +69,14 @@ type GameHideBombAction = { type: 'hideBomb' };
 type GameUpdateLoopAction = { type: 'updateLoop' };
 type GameRespawnAction = { type: 'respawn' };
 type GameChangeCharacterAnimationAction = { type: 'setCharacterAnimation'; payload: string };
+type GameCollectOrHitAction = {
+  type: 'collect-or-hit';
+  payload: {
+    type: 'coin' | 'meat' | 'knife' | 'enemy';
+    award: number;
+    damage: number;
+  };
+};
 
 type GameAction =
   | GameStartAction
@@ -75,7 +91,8 @@ type GameAction =
   | GameHideBombAction
   | GameUpdateLoopAction
   | GameRespawnAction
-  | GameChangeCharacterAnimationAction;
+  | GameChangeCharacterAnimationAction
+  | GameCollectOrHitAction;
 
 const GameStateContext = createContext(initialState);
 const GameStateDispatchContext = createContext<Dispatch<GameAction> | undefined>(undefined);
@@ -146,6 +163,30 @@ function gameReducer(state: GameState, action: GameAction): GameState {
       ...state,
       playerPosition: 'right',
     };
+  }
+
+  if (action.type === 'collect-or-hit') {
+    if (action.payload.type === 'coin') {
+      return {
+        ...state,
+        achievedAward: state.achievedAward + action.payload.award,
+        achievedCoins: state.achievedCoins++,
+      };
+    }
+    if (action.payload.type === 'knife') {
+      return {
+        ...state,
+        achievedAward: state.achievedAward + action.payload.award,
+        achievedKnifes: state.achievedKnifes++,
+      };
+    }
+    if (action.payload.type === 'meat') {
+      return {
+        ...state,
+        achievedAward: state.achievedAward + action.payload.award,
+        achievedMeats: state.achievedMeats++,
+      };
+    }
   }
 
   if (action.type === 'hideBomb') {

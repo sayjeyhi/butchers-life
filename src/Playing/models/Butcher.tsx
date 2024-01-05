@@ -6,8 +6,7 @@ import { useFrame } from '@react-three/fiber';
 import { GLTF } from 'three-stdlib';
 import * as THREE from 'three';
 import { framerMotionConfig } from '../../constants.ts';
-import { RigidBody } from '@react-three/rapier';
-import { useMoveRigidBody } from '../hooks/useMoveRigidBody.ts';
+import { CapsuleCollider, RigidBody } from '@react-three/rapier';
 
 type GLTFResult = GLTF & {
   nodes: {
@@ -37,7 +36,7 @@ export function Butcher({ group, ...props }: any) {
   const playerPositionY = useMotionValue(0);
   const playerPositionZ = useMotionValue(0);
 
-  const { playerAnimation, playerPosition, status } = useGame();
+  let { dispatch, playerAnimation, playerPosition, status } = useGame();
   const { animations: catwalk } = useFBX('/animations/an-catwalk.fbx');
   const { animations: dancing } = useFBX('/animations/an-dancing.fbx');
   const { animations: drunkRun } = useFBX('/animations/an-drunk-run.fbx');
@@ -111,6 +110,13 @@ export function Butcher({ group, ...props }: any) {
   useEffect(() => {
     if (!playerAnimation || !actions[playerAnimation]) return;
 
+    // random animation when idle
+    const funnyAnimations = ['dancing', 'hipHopDance'];
+    if (playerAnimation === 'idle') {
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      playerAnimation = funnyAnimations[Math.floor(Math.random() * funnyAnimations.length)];
+    }
+
     if (playerAnimation === 'jump') {
       animate(playerPositionY, 0.1, framerMotionConfig);
     } else {
@@ -138,10 +144,6 @@ export function Butcher({ group, ...props }: any) {
   }, [playerPositionZ, status]);
 
   useFrame(() => {
-    // group.current.position.x = playerPositionX.get();
-    // group.current.position.y = playerPositionY.get();
-    // group.current.position.z = playerPositionZ.get();
-
     rigid.current!.setTranslation(
       {
         x: playerPositionX.get(),
@@ -155,13 +157,11 @@ export function Butcher({ group, ...props }: any) {
   return (
     <RigidBody
       ref={rigid}
-      type="dynamic"
-      colliders="cuboid"
+      type="fixed"
+      colliders={false}
       linearDamping={12}
-      onCollisionEnter={({ other }) => {
-        console.log('collided onCollisionEnter', other.rigidBody?.userData);
-      }}
       onIntersectionEnter={({ other }) => {
+        dispatch({ type: 'collect-or-hit', payload: other.rigidBody?.userData as any });
         console.log('collided onIntersectionEnter', other.rigidBody?.userData);
       }}
       lockRotations
@@ -211,6 +211,7 @@ export function Butcher({ group, ...props }: any) {
           </group>
         </group>
       </group>
+      <CapsuleCollider args={[0.14, 0.14]} position={[0, 0.1, 0]} />
     </RigidBody>
   );
 }

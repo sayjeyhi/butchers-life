@@ -2,11 +2,12 @@ import { useRef } from 'react';
 import { useGLTF, useAnimations } from '@react-three/drei';
 import { useMoveItemOnRoad } from '../../hooks/useMoveItemOnRoad.ts';
 import { RigidBody } from '@react-three/rapier';
+import { useGame } from '../../../_hooks/useGame.tsx';
 
 export function Coin(props: JSX.IntrinsicElements['group']) {
   const group = useRef(null);
   const rigid = useRef(null);
-  const { nodes, materials, animations } = useGLTF('/models/coin-final.glb');
+  const { nodes, materials, animations } = useGLTF('/models/coin-22.glb');
   const { actions } = useAnimations(animations, group);
 
   const { 'position-x': posX, 'position-y': posY, 'position-z': posZ, ...rest } = props;
@@ -19,6 +20,11 @@ export function Coin(props: JSX.IntrinsicElements['group']) {
     initialObjectPosY: posY,
     initialObjectPosZ: posZ,
   });
+  const { status } = useGame();
+
+  if (status === 'idle') {
+    return null;
+  }
 
   return (
     <RigidBody
@@ -26,7 +32,6 @@ export function Coin(props: JSX.IntrinsicElements['group']) {
       type="dynamic"
       colliders="cuboid"
       linearDamping={12}
-      // position={[posX, posY, posZ]}
       lockRotations
       sensor
       userData={{
@@ -36,19 +41,24 @@ export function Coin(props: JSX.IntrinsicElements['group']) {
     >
       <group ref={group} {...rest} dispose={null}>
         <group name="Scene">
-          <group name="Text" position={[-0.002, 0.479, 0.013]} rotation={[Math.PI / 2, 0, 0]} scale={0.711}>
+          <group
+            name="coin"
+            position={[-0.002, 0.479, 0.013]}
+            rotation={[Math.PI / 2, 0, 0]}
+            scale={[0.711, 1.153, 0.711]}
+          >
+            <mesh
+              name="Text"
+              castShadow
+              receiveShadow
+              geometry={nodes.Text.geometry}
+              material={materials['Material.027']}
+            />
             <mesh
               name="Text_1"
               castShadow
               receiveShadow
               geometry={nodes.Text_1.geometry}
-              material={materials['Material.027']}
-            />
-            <mesh
-              name="Text_2"
-              castShadow
-              receiveShadow
-              geometry={nodes.Text_2.geometry}
               material={materials['SVGMat.017']}
             />
           </group>
@@ -58,4 +68,4 @@ export function Coin(props: JSX.IntrinsicElements['group']) {
   );
 }
 
-useGLTF.preload('/models/coin-final.glb');
+useGLTF.preload('/models/coin-22.glb');

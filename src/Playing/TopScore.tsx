@@ -1,9 +1,8 @@
 import { useGame } from '../_hooks/useGame.tsx';
-import { useState } from 'react';
 import { SettingModal } from './SettingModal.tsx';
 
 export const TopScore = () => {
-  const { timer, dispatch, status } = useGame();
+  const { achievedCoins, achievedAward, timer, dispatch, status } = useGame();
 
   const handleShowSettings = () => {
     dispatch({ type: 'pause' });
@@ -17,9 +16,14 @@ export const TopScore = () => {
             <img src="/images/timer.png" alt="Timer icon" className="absolute -left-2 -top-3 w-14" />
             {timer}
           </div>
-          <button className="relative mt-4 block w-[120px] rounded-2xl bg-[rgba(255,255,255,0.2)] p-1 pr-6 text-right text-2xl font-bold text-red-50 backdrop-blur">
-            <img src="/images/gem-stone.png" alt="Timer icon" className="absolute -left-2 -top-3 w-14" />0
-          </button>
+          <div className="relative mt-4 block w-[120px] rounded-2xl bg-[rgba(255,255,255,0.2)] p-1 pr-6 text-right text-2xl font-bold text-red-50 backdrop-blur">
+            <img src="/images/coin.png" alt="Timer icon" className="absolute -left-2 -top-3 w-14" />
+            {achievedCoins}
+          </div>
+          <div className="relative mt-4 block w-[120px] rounded-2xl bg-[rgba(255,255,255,0.2)] p-1 pr-6 text-right text-2xl font-bold text-red-50 backdrop-blur">
+            <img src="/images/award.png" alt="Timer icon" className="absolute -left-2 -top-3 w-14" />
+            {achievedAward}
+          </div>
         </div>
 
         <div>

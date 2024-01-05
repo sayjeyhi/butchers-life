@@ -27,11 +27,12 @@ export const ThreeD = () => {
       <directionalLight position={[0, 50, 180]} intensity={0.1} />
 
       <group visible={status !== 'game-over'}>
-        <City position-z={status === 'not-started' ? 42 : 0} />
-        <City position-z={status === 'not-started' ? 42 : -GAMEBOARD_LENGTH} />
-        <City position-z={status === 'not-started' ? 42 : GAMEBOARD_LENGTH} />
+        <City position-z={status === 'not-started' ? 80 : 0} />
+        <City position-z={status === 'not-started' ? 80 : -GAMEBOARD_LENGTH} />
+        <City position-z={status === 'not-started' ? 80 : GAMEBOARD_LENGTH} />
 
         {showBomb && <Explosion />}
+
         {enemies.map((_, index) => {
           const column = index % ENEMY_COLUMNS;
           const row = Math.floor(index / ENEMY_COLUMNS);
@@ -39,10 +40,17 @@ export const ThreeD = () => {
           return <Ghost scale={0.09} key={index} position-z={-15 - row * ENEMY_SPACE_ROW} position-x={xPos} />;
         })}
         {coins.map((_, index) => (
-          <Coin scale={0.09} key={index} position-z={20 + index * COIN_SPACE} position-x={-0.32} layers={1} />
+          <Coin
+            scale={0.11}
+            key={index}
+            position-y={-0.01}
+            position-z={20 + index * COIN_SPACE}
+            position-x={-0.32}
+            layers={1}
+          />
         ))}
         {meats.map((_, index) => (
-          <Meat scale={0.06} key={index} position-z={30 + index * COIN_SPACE} position-x={0.32} />
+          <Meat scale={0.06} key={index} position-y={-0.01} position-z={30 + index * COIN_SPACE} position-x={0.32} />
         ))}
 
         <Knife position-y={0} position-z={18} scale={0.08} />

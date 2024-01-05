@@ -2,11 +2,12 @@ import { useRef } from 'react';
 import { useGLTF, useAnimations } from '@react-three/drei';
 import { useMoveItemOnRoad } from '../../hooks/useMoveItemOnRoad.ts';
 import { RigidBody } from '@react-three/rapier';
+import { useGame } from '../../../_hooks/useGame.tsx';
 
 export function Knife(props: JSX.IntrinsicElements['group']) {
   const group = useRef(null);
   const rigid = useRef(null);
-  const { nodes, materials, animations } = useGLTF('/models/knife-final-2.glb');
+  const { nodes, materials, animations } = useGLTF('/models/knife-final-222.glb');
   const { actions } = useAnimations(animations, group);
 
   const { 'position-x': posX, 'position-y': posY, 'position-z': posZ, ...rest } = props;
@@ -20,14 +21,18 @@ export function Knife(props: JSX.IntrinsicElements['group']) {
     initialObjectPosY: posY,
     initialObjectPosZ: posZ,
   });
+  const { status } = useGame();
+
+  if (status === 'idle') {
+    return null;
+  }
 
   return (
     <RigidBody
       ref={rigid}
       type="dynamic"
-      colliders="trimesh"
-      linearDamping={2}
-      // position={[posX, posY, posZ]}
+      colliders="cuboid"
+      linearDamping={12}
       lockRotations
       sensor
       userData={{
@@ -38,30 +43,51 @@ export function Knife(props: JSX.IntrinsicElements['group']) {
       <group ref={group} {...rest} dispose={null}>
         <group name="Scene">
           <group
-            name="Plane001ss"
+            name="Plane001ss001"
             position={[-0.052, 1.368, -0.479]}
-            rotation={[0.821, -0.361, 2.36]}
+            rotation={[1.186, 0.687, 1.059]}
             scale={[0.177, 0.177, 0.442]}
           >
             <mesh
-              name="Plane007"
+              name="Plane001"
               castShadow
               receiveShadow
-              geometry={nodes.Plane007.geometry}
+              geometry={nodes.Plane001.geometry}
+              material={materials['silver 3.001']}
+            />
+            <mesh
+              name="Plane001_1"
+              castShadow
+              receiveShadow
+              geometry={nodes.Plane001_1.geometry}
+              material={materials['silver.001']}
+            />
+            <mesh
+              name="Plane001_2"
+              castShadow
+              receiveShadow
+              geometry={nodes.Plane001_2.geometry}
+              material={materials['wood brown.001']}
+            />
+            <mesh
+              name="Plane001_3"
+              castShadow
+              receiveShadow
+              geometry={nodes.Plane001_3.geometry}
               material={materials['silver 3']}
             />
             <mesh
-              name="Plane007_1"
+              name="Plane001_4"
               castShadow
               receiveShadow
-              geometry={nodes.Plane007_1.geometry}
+              geometry={nodes.Plane001_4.geometry}
               material={materials.silver}
             />
             <mesh
-              name="Plane007_2"
+              name="Plane001_5"
               castShadow
               receiveShadow
-              geometry={nodes.Plane007_2.geometry}
+              geometry={nodes.Plane001_5.geometry}
               material={materials['wood brown']}
             />
           </group>
@@ -71,4 +97,4 @@ export function Knife(props: JSX.IntrinsicElements['group']) {
   );
 }
 
-useGLTF.preload('/models/knife-final-2.glb');
+useGLTF.preload('/models/knife-final-222.glb');

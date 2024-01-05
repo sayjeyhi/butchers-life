@@ -2,6 +2,7 @@ import React, { useRef } from 'react';
 import { useGLTF } from '@react-three/drei';
 import { useMoveItemOnRoad } from '../../hooks/useMoveItemOnRoad.ts';
 import { RigidBody } from '@react-three/rapier';
+import { useGame } from '../../../_hooks/useGame.tsx';
 
 export function Grave(props: JSX.IntrinsicElements['group']) {
   const group = useRef(null);
@@ -17,6 +18,11 @@ export function Grave(props: JSX.IntrinsicElements['group']) {
     initialObjectPosY: posY,
     initialObjectPosZ: posZ,
   });
+  const { status } = useGame();
+
+  if (status === 'idle') {
+    return null;
+  }
 
   return (
     <RigidBody

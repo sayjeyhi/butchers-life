@@ -32,7 +32,7 @@ export const useMoveItemOnRoad = ({
   useEffect(() => {
     if (!animation) return;
 
-    if (status === 'paused' || status === 'not-started' || status === 'idle') {
+    if (status === 'paused' || status === 'not-started' || status === 'idle' || status === 'game-over') {
       animation.stop();
       animation.fadeOut(0.1);
     }
