@@ -162,7 +162,7 @@ export function Butcher({ group, ...props }: any) {
       linearDamping={12}
       onIntersectionEnter={({ other }) => {
         dispatch({ type: 'collect-or-hit', payload: other.rigidBody?.userData as any });
-        console.log('collided onIntersectionEnter', other.rigidBody?.userData);
+        // console.log('collided onIntersectionEnter', other.rigidBody?.userData);
       }}
       lockRotations
     >

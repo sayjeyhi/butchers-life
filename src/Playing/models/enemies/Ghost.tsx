@@ -30,6 +30,7 @@ export function Ghost(props: JSX.IntrinsicElements['group']) {
       lockRotations
       sensor
       userData={{
+        isEnemy: true,
         type: 'ghost',
         damage: 100,
       }}

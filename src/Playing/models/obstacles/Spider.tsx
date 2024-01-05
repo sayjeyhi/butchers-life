@@ -35,6 +35,7 @@ export function Spider(props: JSX.IntrinsicElements['group']) {
       lockRotations
       sensor
       userData={{
+        isEnemy: true,
         type: 'spider',
         damage: 60,
       }}

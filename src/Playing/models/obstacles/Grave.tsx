@@ -33,6 +33,7 @@ export function Grave(props: JSX.IntrinsicElements['group']) {
       lockRotations
       sensor
       userData={{
+        isEnemy: true,
         type: 'grave',
         damage: 70,
       }}

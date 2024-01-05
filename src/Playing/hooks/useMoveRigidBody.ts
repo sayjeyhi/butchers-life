@@ -37,12 +37,12 @@ export const useMoveRigidBody = ({
         y: realPositionY,
         z: realPositionZ,
       };
-      if (name === 'coin')
-        console.log({
-          x: realPositionX,
-          y: realPositionY,
-          z: realPositionZ,
-        });
+      // if (name === 'coin')
+      // console.log({
+      //   x: realPositionX,
+      //   y: realPositionY,
+      //   z: realPositionZ,
+      // });
       rigidBody!.setTranslation(
         {
           x: realPositionX,
