@@ -27,7 +27,16 @@ interface GameState {
   achievedCoins: number;
   achievedMeats: number;
   achievedKnifes: number;
+  lives: number;
 }
+
+function enemiesRandomPositions(count: number) {
+  return randomPositions(count).map(enemy => {
+    const newPosition = [...enemy.position];
+    newPosition[2] = Math.abs(newPosition[2]);
+    return {...enemy, position: newPosition};
+  });
+} 
 
 function randomPosition(i: number): GameObject {
   return {
@@ -43,7 +52,7 @@ function randomPositions(count: number) {
 const initialState: GameState = {
   status: 'not-started',
   timer: GAME_TIME,
-  enemies: randomPositions(NB_ENEMIES),
+  enemies: enemiesRandomPositions(NB_ENEMIES),
   coins: randomPositions(10),
   meats: randomPositions(10),
   showBomb: false,
@@ -54,6 +63,7 @@ const initialState: GameState = {
   achievedCoins: 0,
   achievedMeats: 0,
   achievedKnifes: 0,
+  lives: 100,
 };
 
 type GameStartAction = { type: 'start' };
@@ -91,8 +101,8 @@ type GameAction =
   | GameHideBombAction
   | GameUpdateLoopAction
   | GameRespawnAction
-  | GameChangeCharacterAnimationAction
-  | GameCollectOrHitAction;
+  | GameCollectOrHitAction
+  | GameChangeCharacterAnimationAction;
 
 const GameStateContext = createContext(initialState);
 const GameStateDispatchContext = createContext<Dispatch<GameAction> | undefined>(undefined);
@@ -166,21 +176,41 @@ function gameReducer(state: GameState, action: GameAction): GameState {
   }
 
   if (action.type === 'collect-or-hit') {
-    if (action.payload.type === 'coin') {
+    if (action.payload.type === 'ghost') {
+      return {
+        ...state,
+        lives: state.lives - action.payload.damage,
+      }
+    }
+    else if (action.payload.type === 'spider' ||action.payload.type === 'grave') {
+      return {
+        ...state,
+        lives: state.lives - action.payload.damage,
+        enemies: state.enemies.map((enemy) => {
+          const newPosition = [...enemy.position];
+          newPosition[2] = newPosition[2] - 1;
+          
+          return {
+            ...enemy, position: newPosition
+          };
+        }),
+      };
+    }
+    else if (action.payload.type === 'coin') {
       return {
         ...state,
         achievedAward: state.achievedAward + action.payload.award,
         achievedCoins: state.achievedCoins++,
       };
     }
-    if (action.payload.type === 'knife') {
+    else if (action.payload.type === 'knife') {
       return {
         ...state,
         achievedAward: state.achievedAward + action.payload.award,
         achievedKnifes: state.achievedKnifes++,
       };
     }
-    if (action.payload.type === 'meat') {
+    else if (action.payload.type === 'meat') {
       return {
         ...state,
         achievedAward: state.achievedAward + action.payload.award,
@@ -203,7 +233,7 @@ function gameReducer(state: GameState, action: GameAction): GameState {
   if (action.type === 'updateLoop') {
     // if (state.status === 'paused') return state;
     const timer = state.timer - 1;
-    if (timer <= 0) {
+    if (state.lives <= 0 || timer <= 0) {
       return {
         ...state,
         status: 'game-over',

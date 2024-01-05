@@ -37,7 +37,7 @@ export const ThreeD = () => {
           const column = index % ENEMY_COLUMNS;
           const row = Math.floor(index / ENEMY_COLUMNS);
           const xPos = column * ENEMY_SPACE_COLUMN - ((ENEMY_COLUMNS - 1) * ENEMY_SPACE_COLUMN) / 2;
-          return <Ghost scale={0.09} key={index} position-z={-15 - row * ENEMY_SPACE_ROW} position-x={xPos} />;
+          return <Ghost scale={0.09} key={index} position-z={-15 - _.position[2]} position-x={xPos} />;
         })}
         {coins.map((_, index) => (
           <Coin
