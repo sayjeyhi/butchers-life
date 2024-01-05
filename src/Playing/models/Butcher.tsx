@@ -7,6 +7,7 @@ import { GLTF } from 'three-stdlib';
 import * as THREE from 'three';
 import { framerMotionConfig } from '../../constants.ts';
 import { CapsuleCollider, RigidBody } from '@react-three/rapier';
+import { Clock } from 'three';
 
 type GLTFResult = GLTF & {
   nodes: {
@@ -31,12 +32,19 @@ type GLTFResult = GLTF & {
 export function Butcher({ group, ...props }: any) {
   const rigid = useRef(null);
   const { nodes, materials } = useGLTF('/models/butcher.glb') as GLTFResult;
+  const clockRef = useRef(new Clock());
+  const tasksRef = useRef({
+    addRewards: { interval: 6, lastExecution: 0 },
+    addObstacles: { interval: 10, lastExecution: 0 },
+    increaseSpeed: { interval: 30, lastExecution: 0 },
+  });
 
   const playerPositionX = useMotionValue(0);
   const playerPositionY = useMotionValue(0);
   const playerPositionZ = useMotionValue(0);
 
-  let { dispatch, playerAnimation, playerPosition, status } = useGame();
+  const { dispatch, playerPosition, status } = useGame();
+  let { playerAnimation } = useGame();
   const { animations: catwalk } = useFBX('/animations/an-catwalk.fbx');
   const { animations: dancing } = useFBX('/animations/an-dancing.fbx');
   const { animations: drunkRun } = useFBX('/animations/an-drunk-run.fbx');
@@ -144,6 +152,8 @@ export function Butcher({ group, ...props }: any) {
   }, [playerPositionZ, status]);
 
   useFrame(() => {
+    if (!rigid.current) return;
+
     rigid.current!.setTranslation(
       {
         x: playerPositionX.get(),
@@ -152,6 +162,23 @@ export function Butcher({ group, ...props }: any) {
       },
       true,
     );
+
+    const elapsedTime = clockRef.current.getElapsedTime();
+    const tasks = tasksRef.current;
+    if (elapsedTime - tasks.addRewards.lastExecution >= tasks.addRewards.interval) {
+      tasks.addRewards.lastExecution = elapsedTime;
+      dispatch({ type: 'add-reward' });
+    }
+    if (elapsedTime - tasks.addObstacles.lastExecution >= tasks.addObstacles.interval) {
+      console.log('Adding Obstacles: Doing something every 10 seconds');
+      tasks.addObstacles.lastExecution = elapsedTime;
+      dispatch({ type: 'add-obstacle' });
+    }
+    if (elapsedTime - tasks.increaseSpeed.lastExecution >= tasks.increaseSpeed.interval) {
+      console.log('Increasing Speed: Doing something every 30 seconds');
+      tasks.increaseSpeed.lastExecution = elapsedTime;
+      dispatch({ type: 'increase-speed' });
+    }
   });
 
   return (

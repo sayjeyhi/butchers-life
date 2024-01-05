@@ -1,8 +1,5 @@
 import { Dispatch, PropsWithChildren, createContext, useContext, useEffect, useReducer } from 'react';
 
-const GAME_TIME = 60;
-const NB_ENEMIES = 3;
-
 interface GameObject {
   id: number;
   position: [number, number, number];
@@ -21,9 +18,9 @@ interface GameState {
   ghosts: GameObject[];
   coins: GameObject[];
   meats: GameObject[];
-  grave: GameObject;
-  spider: GameObject;
-  nail: GameObject;
+  graves: GameObject[];
+  spiders: GameObject[];
+  nails: GameObject[];
   showBomb: boolean;
   leaderBoard: LeaderBoardEntry[];
   playerPosition: string;
@@ -43,28 +40,29 @@ function ghostsRandomPositions(count: number) {
   });
 }
 
-function randomPosition(i: number): GameObject {
+function randomPosition(i: number, x: number = 0): GameObject {
   return {
     id: i,
     isCollected: false,
-    position: [Math.random() * 10 - 5, 0.5, Math.random() * 10 - 5],
+    position: [x, 0, 18],
   };
 }
 
 function randomPositions(count: number) {
-  return Array.from({ length: count }, (_, i) => randomPosition(i));
+  const randomX = [-0.32, 0, 0, 0.32][Math.floor(Math.random() * 4)];
+  return Array.from({ length: count }, (_, i) => randomPosition(i, randomX));
 }
 
 const initialState: GameState = {
   status: 'not-started',
-  timer: GAME_TIME,
-  ghosts: ghostsRandomPositions(NB_ENEMIES),
-  coins: randomPositions(10),
-  meats: randomPositions(10),
-  knifes: randomPositions(10),
-  grave: randomPosition(0),
-  nail: randomPosition(0),
-  spider: randomPosition(0),
+  timer: 0,
+  ghosts: ghostsRandomPositions(3),
+  coins: [],
+  meats: [],
+  knifes: [],
+  graves: [],
+  nails: [],
+  spiders: [],
   showBomb: false,
   leaderBoard: [],
   playerPosition: 'center',
@@ -88,6 +86,9 @@ type GameMoveRightAction = { type: 'move-right' };
 type GameHideBombAction = { type: 'hideBomb' };
 type GameUpdateLoopAction = { type: 'updateLoop' };
 type GameRespawnAction = { type: 'respawn' };
+type GameIncreaseSpeedAction = { type: 'increase-speed' };
+type GameAddRewardAction = { type: 'add-reward' };
+type GameAddObstacleAction = { type: 'add-obstacle' };
 type GameChangeCharacterAnimationAction = { type: 'setCharacterAnimation'; payload: string };
 type GameCollectOrHitAction = {
   type: 'collect-or-hit';
@@ -114,6 +115,9 @@ type GameAction =
   | GameUpdateLoopAction
   | GameRespawnAction
   | GameCollectOrHitAction
+  | GameAddRewardAction
+  | GameIncreaseSpeedAction
+  | GameAddObstacleAction
   | GameChangeCharacterAnimationAction;
 
 const GameStateContext = createContext(initialState);
@@ -131,7 +135,7 @@ function gameReducer(state: GameState, action: GameAction): GameState {
   }
   if (action.type === 'play') {
     return {
-      ...initialState,
+      ...state,
       status: 'playing',
       playerAnimation: 'slowRun',
     };
@@ -156,6 +160,27 @@ function gameReducer(state: GameState, action: GameAction): GameState {
     return {
       ...state,
       status: 'playing',
+    };
+  }
+  if (action.type === 'add-obstacle') {
+    const availableObstacles = ['graves', 'nails', 'spiders'] as const;
+    const randomObstacle = availableObstacles[Math.floor(Math.random() * availableObstacles.length)];
+
+    console.log('Obstacle added:', randomObstacle, state[randomObstacle]);
+
+    return {
+      ...state,
+      [randomObstacle]: [...state[randomObstacle], ...randomPositions(1)],
+    };
+  }
+  if (action.type === 'add-reward') {
+    const availableRewards = ['coins', 'knifes', 'meats'] as const;
+    const randomReward = availableRewards[Math.floor(Math.random() * availableRewards.length)];
+
+    console.log('Reward added:', randomReward, state[randomReward]);
+    return {
+      ...state,
+      [randomReward]: [...state[randomReward], ...randomPositions(8)],
     };
   }
   if (action.type === 'setCharacterAnimation') {
@@ -276,8 +301,8 @@ function gameReducer(state: GameState, action: GameAction): GameState {
 
   if (action.type === 'updateLoop') {
     // if (state.status === 'paused') return state;
-    const timer = state.timer - 1;
-    if (state.lives <= 0 || timer <= 0) {
+    const timer = state.timer + 1;
+    if (state.lives <= 0) {
       return {
         ...state,
         status: 'game-over',

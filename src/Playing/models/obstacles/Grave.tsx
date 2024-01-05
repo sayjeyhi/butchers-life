@@ -3,8 +3,9 @@ import { useGLTF } from '@react-three/drei';
 import { useMoveItemOnRoad } from '../../hooks/useMoveItemOnRoad.ts';
 import { RigidBody } from '@react-three/rapier';
 import { useGame } from '../../../_hooks/useGame.tsx';
+import { useCollectOnCollide } from '../../hooks/useCollectOnCollide.ts';
 
-export function Grave(props: JSX.IntrinsicElements['group']) {
+export function Grave(props: JSX.IntrinsicElements['group'] & { isCollected: boolean; itemId: number }) {
   const group = useRef(null);
   const rigid = useRef(null);
   const { nodes, materials } = useGLTF('/models/grave-21.glb');
@@ -18,6 +19,9 @@ export function Grave(props: JSX.IntrinsicElements['group']) {
     initialObjectPosY: posY,
     initialObjectPosZ: posZ,
   });
+
+  useCollectOnCollide({ ref: group.current, isColloid: props.isCollected });
+
   const { status } = useGame();
 
   if (status === 'idle') {

@@ -17,7 +17,9 @@ import { COIN_SPACE, ENEMY_COLUMNS, ENEMY_SPACE_COLUMN, GAMEBOARD_LENGTH } from 
 export const ThreeD = () => {
   useKeyboard();
   const player = useRef(null);
-  const { grave, nail, spider, ghosts, status, showBomb, coins, meats, knifes } = useGame();
+  const { graves, nails, spiders, ghosts, status, showBomb, coins, meats, knifes } = useGame();
+
+  if (status === 'game-over') return null;
 
   return (
     <>
@@ -27,7 +29,7 @@ export const ThreeD = () => {
       <directionalLight position={[10, 1.4, 10]} intensity={0.2} />
       <directionalLight position={[0, 50, 180]} intensity={0.1} />
 
-      <group visible={status !== 'game-over'}>
+      <group>
         <City position-z={status === 'not-started' ? 80 : 0} />
         <City position-z={status === 'not-started' ? 80 : -GAMEBOARD_LENGTH} />
         <City position-z={status === 'not-started' ? 80 : GAMEBOARD_LENGTH} />
@@ -46,9 +48,9 @@ export const ThreeD = () => {
             key={index}
             itemId={coins[index].id}
             isCollected={coins[index].isCollected}
-            position-x={knifes[index].position[0]}
-            position-y={knifes[index].position[1]}
-            position-z={knifes[index].position[2] + index * COIN_SPACE}
+            position-x={coins[index].position[0]}
+            position-y={coins[index].position[1]}
+            position-z={coins[index].position[2] + index * COIN_SPACE}
           />
         ))}
         {meats.map((_, index) => (
@@ -57,9 +59,9 @@ export const ThreeD = () => {
             key={index}
             itemId={meats[index].id}
             isCollected={meats[index].isCollected}
-            position-x={knifes[index].position[0]}
-            position-y={knifes[index].position[1]}
-            position-z={knifes[index].position[2] + index * COIN_SPACE}
+            position-x={meats[index].position[0]}
+            position-y={meats[index].position[1]}
+            position-z={meats[index].position[2] + index * COIN_SPACE}
           />
         ))}
         {knifes.map((_, index) => (
@@ -74,30 +76,39 @@ export const ThreeD = () => {
           />
         ))}
 
-        {grave && (
+        {graves.map((_, index) => (
           <Grave
-            position-x={grave.position[0]}
-            position-y={grave.position[1]}
-            position-z={grave.position[2]}
             scale={0.08}
+            key={index}
+            itemId={graves[index].id}
+            isCollected={graves[index].isCollected}
+            position-x={graves[index].position[0]}
+            position-y={graves[index].position[1]}
+            position-z={graves[index].position[2] + index * COIN_SPACE}
           />
-        )}
-        {nail && (
+        ))}
+        {nails.map((_, index) => (
           <Nail
-            position-x={nail.position[0]}
-            position-y={nail.position[1]}
-            position-z={nail.position[2]}
             scale={0.03}
+            key={index}
+            itemId={nails[index].id}
+            isCollected={nails[index].isCollected}
+            position-x={nails[index].position[0]}
+            position-y={nails[index].position[1]}
+            position-z={nails[index].position[2] + index * COIN_SPACE}
           />
-        )}
-        {spider && (
+        ))}
+        {spiders.map((_, index) => (
           <Spider
-            position-x={spider.position[0]}
-            position-y={spider.position[1]}
-            position-z={spider.position[2]}
             scale={0.19}
+            key={index}
+            itemId={spiders[index].id}
+            isCollected={spiders[index].isCollected}
+            position-x={spiders[index].position[0]}
+            position-y={spiders[index].position[1]}
+            position-z={spiders[index].position[2] + index * COIN_SPACE}
           />
-        )}
+        ))}
 
         <Butcher group={player} scale={0.09} />
       </group>

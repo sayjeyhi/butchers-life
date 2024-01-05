@@ -6,6 +6,7 @@ import { useGame } from '../../../_hooks/useGame.tsx';
 import { animate, useMotionValue } from 'framer-motion';
 import { framerMotionConfig } from '../../../constants.ts';
 import { useFrame } from '@react-three/fiber';
+import { useCollectOnCollide } from '../../hooks/useCollectOnCollide.ts';
 
 export function Knife(props: JSX.IntrinsicElements['group'] & { isCollected: boolean; itemId: number }) {
   const group = useRef(null);
@@ -26,23 +27,7 @@ export function Knife(props: JSX.IntrinsicElements['group'] & { isCollected: boo
   });
   const { status } = useGame();
 
-  const coinPositionX = useMotionValue(0);
-  const coinPositionY = useMotionValue(0);
-  const coinPositionZ = useMotionValue(0);
-  useEffect(() => {
-    if (props.isCollected) {
-      animate(coinPositionX, -1.9, framerMotionConfig);
-      animate(coinPositionY, 1.12, framerMotionConfig);
-      animate(coinPositionZ, 16, framerMotionConfig);
-    }
-  }, [coinPositionX, coinPositionY, coinPositionZ, props.isCollected]);
-
-  useFrame(() => {
-    if (!group.current) return;
-    group.current!.position.x = coinPositionX.get();
-    group.current!.position.y = coinPositionY.get();
-    group.current!.position.z = coinPositionZ.get();
-  });
+  useCollectOnCollide({ ref: group.current, isColloid: props.isCollected });
 
   if (status === 'idle') {
     return null;

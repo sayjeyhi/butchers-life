@@ -3,8 +3,9 @@ import { useGLTF, useAnimations } from '@react-three/drei';
 import { useMoveItemOnRoad } from '../../hooks/useMoveItemOnRoad.ts';
 import { RigidBody } from '@react-three/rapier';
 import { useGame } from '../../../_hooks/useGame.tsx';
+import { useCollectOnCollide } from '../../hooks/useCollectOnCollide.ts';
 
-export function Spider(props: JSX.IntrinsicElements['group']) {
+export function Spider(props: JSX.IntrinsicElements['group'] & { isCollected: boolean; itemId: number }) {
   const group = useRef(null);
   const rigid = useRef(null);
   const { nodes, materials, animations } = useGLTF('/models/spider-with-web-final-12.glb');
@@ -21,6 +22,8 @@ export function Spider(props: JSX.IntrinsicElements['group']) {
     initialObjectPosZ: posZ,
   });
   const { status } = useGame();
+
+  useCollectOnCollide({ ref: group.current, isColloid: props.isCollected });
 
   if (status === 'idle') {
     return null;

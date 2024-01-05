@@ -5,6 +5,7 @@ import { GLTF } from 'three-stdlib';
 import { useMoveItemOnRoad } from '../../hooks/useMoveItemOnRoad.ts';
 import { useGame } from '../../../_hooks/useGame.tsx';
 import { RigidBody } from '@react-three/rapier';
+import { useCollectOnCollide } from '../../hooks/useCollectOnCollide.ts';
 
 type GLTFResult = GLTF & {
   nodes: {
@@ -53,9 +54,10 @@ type GLTFResult = GLTF & {
   };
 };
 
-export function Nail(props: JSX.IntrinsicElements['group']) {
+export function Nail(props: JSX.IntrinsicElements['group'] & { isCollected: boolean; itemId: number }) {
   const { nodes, materials } = useGLTF('/models/nails.glb') as GLTFResult;
   const rigid = useRef(null);
+  const group = useRef(null);
 
   const { 'position-x': posX, 'position-y': posY, 'position-z': posZ, ...rest } = props;
   useMoveItemOnRoad({
@@ -65,6 +67,9 @@ export function Nail(props: JSX.IntrinsicElements['group']) {
     initialObjectPosY: posY,
     initialObjectPosZ: posZ,
   });
+
+  useCollectOnCollide({ ref: group.current, isColloid: props.isCollected });
+
   const { status } = useGame();
 
   if (status === 'idle') {
@@ -85,7 +90,7 @@ export function Nail(props: JSX.IntrinsicElements['group']) {
         damage: 70,
       }}
     >
-      <group {...rest} dispose={null}>
+      <group ref={group} {...rest} dispose={null}>
         <group position={[-1.998, 0.911, -0.009]} rotation={[-3.139, -0.618, 0]} scale={[0.483, 0.315, 0.483]}>
           <mesh castShadow receiveShadow geometry={nodes.Circle001_1.geometry} material={materials['Material.011']} />
           <mesh castShadow receiveShadow geometry={nodes.Circle001_2.geometry} material={materials['Material.012']} />

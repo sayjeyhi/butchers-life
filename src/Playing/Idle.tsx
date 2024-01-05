@@ -12,9 +12,7 @@ export const Idle = () => {
     if (!counterRef.current) return;
 
     const startCountdown = () => {
-      console.log('showNextItem', countDownItems);
       let index = 0;
-
       const showNextItem = () => {
         if (index < countDownItems.length) {
           setCurrentItem(countDownItems[index]);
