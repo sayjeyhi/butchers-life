@@ -99,8 +99,6 @@ type GamePlayAction = { type: 'play' };
 type GameRestartAction = { type: 'restart' };
 type GamePauseAction = { type: 'pause' };
 type GameResumeAction = { type: 'resume' };
-type GameJumpAction = { type: 'jump' };
-type GameSitAction = { type: 'sit' };
 type GameMoveLeftAction = { type: 'move-left' };
 type GameMoveRightAction = { type: 'move-right' };
 type GameHideBombAction = { type: 'hideBomb' };
@@ -126,8 +124,6 @@ type GameAction =
   | GameRestartAction
   | GamePauseAction
   | GameResumeAction
-  | GameJumpAction
-  | GameSitAction
   | GameMoveLeftAction
   | GameMoveRightAction
   | GameHideBombAction

@@ -126,7 +126,7 @@ export function Butcher({ group, ...props }: any) {
     }
 
     if (playerAnimation === 'jump') {
-      animate(playerPositionY, 0.14, framerMotionConfig);
+      animate(playerPositionY, 0.23, framerMotionConfig);
     } else {
       animate(playerPositionY, 0, framerMotionConfig);
     }
@@ -192,7 +192,7 @@ export function Butcher({ group, ...props }: any) {
       }}
       lockRotations
     >
-      <CapsuleCollider args={[0.044, 0.14]} position={[0, 0.18, 0]} />
+      <CapsuleCollider args={[0.044, 0.14]} position={[0, playerAnimation === 'jump' ? 0.24 : 0.18, 0]} />
       <group ref={group} {...props} dispose={null}>
         <group name="Scene">
           <group name="Armature" scale={0.01}>

@@ -43,7 +43,7 @@ export function Grave(props: JSX.IntrinsicElements['group'] & { isCollected: boo
         itemId: props.itemId,
       }}
     >
-      <CuboidCollider args={[0.1, 0.18, 0.2]} />
+      <CuboidCollider args={[0.09, 0.179, 0.2]} />
       {props.isCollected ? <Explosion scale={0.1} /> : null}
       <group {...rest} ref={group} dispose={null}>
         <group position={[0.101, 1.532, -0.793]} rotation={[-0.069, 0, 0]} scale={0.22}>

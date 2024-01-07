@@ -23,7 +23,7 @@ export function Meat(props: JSX.IntrinsicElements['group'] & { isCollected: bool
   });
   const { status } = useGame();
 
-  useCollectOnCollide({ ref: group.current, isColloid: props.isCollected });
+  useCollectOnCollide({ ref: group.current, initialScale: props.scale, isColloid: props.isCollected });
 
   if (status === 'idle') {
     return null;
@@ -43,7 +43,7 @@ export function Meat(props: JSX.IntrinsicElements['group'] & { isCollected: bool
         itemId: props.itemId,
       }}
     >
-      <CuboidCollider args={[0.06, 0.06, 0.2]} position={[0, 0.09, 0]} />
+      <CuboidCollider args={[0.06, 0.06, 0.2]} position={[0, 0.11, 0]} />
       <group ref={group} {...rest} dispose={null}>
         <group name="Scene">
           <group

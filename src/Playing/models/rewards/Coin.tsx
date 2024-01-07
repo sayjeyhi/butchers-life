@@ -23,7 +23,7 @@ export function Coin(props: JSX.IntrinsicElements['group'] & { isCollected: bool
   });
   const { status } = useGame();
 
-  useCollectOnCollide({ ref: group.current, isColloid: props.isCollected });
+  useCollectOnCollide({ ref: group.current, initialScale: props.scale, isColloid: props.isCollected });
 
   if (status === 'idle') {
     return null;

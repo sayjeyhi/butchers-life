@@ -36,13 +36,12 @@ const AnimatedBox = ({ scale, target, speed, color }: any) => {
 };
 
 export const Explosion = ({
-  nb = 50,
+  nb = 30,
   position = new Vector3(0, 0, 0),
-  limitX = 0.4,
-  limitY = 0.4,
-  limitZ = 0.4,
+  limitX = 0.3,
+  limitY = 0.3,
+  limitZ = 0.3,
   scale = 0.4,
-  multicolor = true,
 }) => {
   const boxes = useMemo(
     () =>
@@ -61,10 +60,10 @@ export const Explosion = ({
   return (
     <group position={[position.x, position.y, position.z]}>
       <Instances>
-        <boxGeometry />
+        <torusGeometry />
         <meshStandardMaterial toneMapped={false} />
         {boxes.map((box, i) => (
-          <AnimatedBox key={i} color={multicolor ? colors[randInt(0, colors.length - 1)] : redColor} {...box} />
+          <AnimatedBox key={i} {...box} />
         ))}
       </Instances>
     </group>
