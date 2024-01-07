@@ -25,7 +25,26 @@ interface GameState {
   showBomb: boolean;
   leaderBoard: LeaderBoardEntry[];
   playerPosition: string;
-  playerAnimation: string;
+  playerAnimation:
+    | 'idle'
+    | 'catwalk'
+    | 'dancing'
+    | 'drunkRun'
+    | 'fastRun'
+    | 'flip'
+    | 'goofyRun'
+    | 'headDownRun'
+    | 'hipHopDance'
+    | 'hitAndFall'
+    | 'hitFromBackWhileRunning'
+    | 'hitObstacle'
+    | 'jump'
+    | 'jumpOn'
+    | 'lookBackRun'
+    | 'runBackward'
+    | 'runLookBack'
+    | 'slowRun'
+    | 'stopLookBack';
   achievedAward: number;
   achievedCoins: number;
   achievedMeats: number;

@@ -1,7 +1,7 @@
-import { useRef } from 'react';
+import React, { useRef } from 'react';
 import { useGLTF, useAnimations } from '@react-three/drei';
 import { useMoveItemOnRoad } from '../../hooks/useMoveItemOnRoad.ts';
-import { RigidBody } from '@react-three/rapier';
+import { CuboidCollider, RigidBody } from '@react-three/rapier';
 import { useGame } from '../../../_hooks/useGame.tsx';
 import { Explosion } from '../../effects/Explosion.tsx';
 import { useCollectOnCollideEnemy } from '../../hooks/useCollectOnCollideEnemy.ts';
@@ -34,7 +34,7 @@ export function Spider(props: JSX.IntrinsicElements['group'] & { isCollected: bo
     <RigidBody
       ref={rigid}
       type="dynamic"
-      colliders="cuboid"
+      colliders={false}
       linearDamping={12}
       lockRotations
       sensor
@@ -45,6 +45,8 @@ export function Spider(props: JSX.IntrinsicElements['group'] & { isCollected: bo
       }}
     >
       {props.isCollected ? <Explosion scale={0.1} /> : null}
+      <CuboidCollider args={[0.13, 0.24, 0.2]} />
+
       <group ref={group} {...rest} dispose={null}>
         <group name="Scene">
           <group name="Head" position={[-0.086, 0.299, 0.21]} rotation={[-0.004, -0.44, -0.004]} scale={0.159}>

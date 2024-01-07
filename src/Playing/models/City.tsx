@@ -2,7 +2,7 @@ import { useGLTF } from '@react-three/drei';
 import { useFrame } from '@react-three/fiber';
 import { useRef } from 'react';
 import { useGame } from '../../_hooks/useGame.tsx';
-import { GAMEBOARD_LENGTH, SCROLL_SPEED } from '../../constants.ts';
+import { GAMEBOARD_LENGTH, INITIAL_SCROLL_SPEED } from '../../constants.ts';
 
 export function City(props: JSX.IntrinsicElements['group']) {
   const { nodes, materials } = useGLTF('/models/city-final-2232.glb');
@@ -12,7 +12,7 @@ export function City(props: JSX.IntrinsicElements['group']) {
   useFrame((_, delta) => {
     if (status === 'paused' || status === 'not-started' || status === 'idle' || !ref.current) return;
 
-    ref.current.position.z -= SCROLL_SPEED * delta;
+    ref.current.position.z -= INITIAL_SCROLL_SPEED * delta;
     const { z } = ref.current.position;
     if (ref.current.position.z < -1.5 * GAMEBOARD_LENGTH) {
       ref.current.position.z = z + GAMEBOARD_LENGTH * 3;

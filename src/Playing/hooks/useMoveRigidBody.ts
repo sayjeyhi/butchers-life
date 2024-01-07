@@ -1,7 +1,7 @@
 import { useFrame } from '@react-three/fiber';
 import { useGame } from '../../_hooks/useGame.tsx';
 import { useRef } from 'react';
-import { SCROLL_SPEED } from '../../constants.ts';
+import { INITIAL_SCROLL_SPEED } from '../../constants.ts';
 
 export const useMoveRigidBody = ({
   ref,
@@ -30,7 +30,7 @@ export const useMoveRigidBody = ({
     if (rigidBody) {
       const realPositionX = initialObjectPosX || 0;
       const realPositionY = initialObjectPosY || 0;
-      const realPositionZ = position.current.z - delta * SCROLL_SPEED;
+      const realPositionZ = position.current.z - delta * INITIAL_SCROLL_SPEED;
 
       position.current = {
         x: realPositionX,

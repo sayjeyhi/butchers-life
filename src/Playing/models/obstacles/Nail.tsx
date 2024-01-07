@@ -4,7 +4,7 @@ import { useGLTF } from '@react-three/drei';
 import { GLTF } from 'three-stdlib';
 import { useMoveItemOnRoad } from '../../hooks/useMoveItemOnRoad.ts';
 import { useGame } from '../../../_hooks/useGame.tsx';
-import { RigidBody } from '@react-three/rapier';
+import { RigidBody, CuboidCollider } from '@react-three/rapier';
 import { useCollectOnCollide } from '../../hooks/useCollectOnCollide.ts';
 import { Explosion } from '../../effects/Explosion.tsx';
 import { useCollectOnCollideEnemy } from '../../hooks/useCollectOnCollideEnemy.ts';
@@ -83,7 +83,7 @@ export function Nail(props: JSX.IntrinsicElements['group'] & { isCollected: bool
     <RigidBody
       ref={rigid}
       type="dynamic"
-      colliders="cuboid"
+      colliders={false}
       linearDamping={12}
       lockRotations
       sensor
@@ -93,6 +93,7 @@ export function Nail(props: JSX.IntrinsicElements['group'] & { isCollected: bool
         itemId: props.itemId,
       }}
     >
+      <CuboidCollider args={[0.15, 0.07, 0.2]} />
       {props.isCollected ? <Explosion scale={0.1} /> : null}
       <group ref={group} {...rest} dispose={null}>
         <group position={[-1.998, 0.911, -0.009]} rotation={[-3.139, -0.618, 0]} scale={[0.483, 0.315, 0.483]}>

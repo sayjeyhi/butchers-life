@@ -1,11 +1,8 @@
-import { useEffect, useRef } from 'react';
+import { useRef } from 'react';
 import { useGLTF, useAnimations } from '@react-three/drei';
 import { useMoveItemOnRoad } from '../../hooks/useMoveItemOnRoad.ts';
-import { RigidBody } from '@react-three/rapier';
+import { CuboidCollider, RigidBody } from '@react-three/rapier';
 import { useGame } from '../../../_hooks/useGame.tsx';
-import { animate, useMotionValue } from 'framer-motion';
-import { framerMotionConfig } from '../../../constants.ts';
-import { useFrame } from '@react-three/fiber';
 import { useCollectOnCollide } from '../../hooks/useCollectOnCollide.ts';
 
 export function Knife(props: JSX.IntrinsicElements['group'] & { isCollected: boolean; itemId: number }) {
@@ -37,7 +34,7 @@ export function Knife(props: JSX.IntrinsicElements['group'] & { isCollected: boo
     <RigidBody
       ref={rigid}
       type="dynamic"
-      colliders="cuboid"
+      colliders={false}
       linearDamping={12}
       lockRotations
       sensor
@@ -47,6 +44,7 @@ export function Knife(props: JSX.IntrinsicElements['group'] & { isCollected: boo
         itemId: props.itemId,
       }}
     >
+      <CuboidCollider args={[0.06, 0.06, 0.2]} position={[0, 0.06, 0]} />
       <group ref={group} {...rest} dispose={null}>
         <group name="Scene">
           <group

@@ -119,14 +119,14 @@ export function Butcher({ group, ...props }: any) {
     if (!playerAnimation || !actions[playerAnimation]) return;
 
     // random animation when idle
-    const funnyAnimations = ['dancing', 'hipHopDance'];
+    const funnyAnimations = ['dancing', 'hipHopDance'] as const;
     if (playerAnimation === 'idle') {
       // eslint-disable-next-line react-hooks/exhaustive-deps
       playerAnimation = funnyAnimations[Math.floor(Math.random() * funnyAnimations.length)];
     }
 
     if (playerAnimation === 'jump') {
-      animate(playerPositionY, 0.1, framerMotionConfig);
+      animate(playerPositionY, 0.14, framerMotionConfig);
     } else {
       animate(playerPositionY, 0, framerMotionConfig);
     }
@@ -189,10 +189,10 @@ export function Butcher({ group, ...props }: any) {
       linearDamping={12}
       onIntersectionEnter={({ other }) => {
         dispatch({ type: 'collect-or-hit', payload: other.rigidBody?.userData as any });
-        // console.log('collided onIntersectionEnter', other.rigidBody?.userData);
       }}
       lockRotations
     >
+      <CapsuleCollider args={[0.044, 0.14]} position={[0, 0.18, 0]} />
       <group ref={group} {...props} dispose={null}>
         <group name="Scene">
           <group name="Armature" scale={0.01}>
@@ -238,7 +238,6 @@ export function Butcher({ group, ...props }: any) {
           </group>
         </group>
       </group>
-      <CapsuleCollider args={[0.14, 0.14]} position={[0, 0.1, 0]} />
     </RigidBody>
   );
 }
