@@ -1,7 +1,7 @@
 import { Pact, readKeyset } from '@kadena/client';
 import { appEnv } from '../appEnv';
 import { getCmdDataOrFail, kdaClient, submitAndListen } from './client';
-import { getAccountOrFail, getNetwork, quickSign, sign } from './wallet';
+import { getAccountOrFail, getNetwork, quickSign } from './wallet';
 
 export async function createPrincipal() {
   // get network id from eckowallet
@@ -61,15 +61,18 @@ export async function fundAccount(account: string, amount: string) {
     await createAccount();
   }
   const { networkId } = await getNetwork();
+  const { publicKey } = await getAccountOrFail();
+
   const transaction = Pact.builder
     .execution(
       Pact.modules['free.meat'].fund(account, {
         decimal: amount,
       }),
     )
+    .addSigner(publicKey, (signFor) => [signFor('coin.GAS'), signFor('free.meat.CREDIT')])
     .setMeta({ chainId: appEnv.CHAIN_ID, senderAccount: account })
     .setNetworkId(networkId)
     .createTransaction();
-  const signedTx = await sign(transaction);
+  const signedTx = await quickSign(transaction);
   return submitAndListen(signedTx);
 }
