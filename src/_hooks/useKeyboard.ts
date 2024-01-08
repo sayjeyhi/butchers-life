@@ -39,5 +39,5 @@ export const useKeyboard = () => {
     return () => {
       window.removeEventListener('keydown', handleKeyPress);
     };
-  }, [status]);
+  }, [dispatch, status]);
 };

@@ -1,6 +1,5 @@
 import { Environment, OrbitControls } from '@react-three/drei';
 import { useRef } from 'react';
-import { Explosion } from './Playing/effects/Explosion.tsx';
 import { Butcher } from './Playing/models/Butcher.tsx';
 import { City } from './Playing/models/City.tsx';
 import { Ghost } from './Playing/models/enemies/Ghost.tsx';

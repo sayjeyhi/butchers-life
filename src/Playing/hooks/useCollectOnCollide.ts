@@ -17,10 +17,8 @@ export const useCollectOnCollide = ({ ref, isColloid, initialScale }: Options) =
 
   useEffect(() => {
     if (isColloid) {
-      animate(positionX, -0.5, framerMotionConfig);
-      animate(positionY, 1.1, framerMotionConfig);
-      animate(positionZ, 20, framerMotionConfig);
-      animate(scale, initialScale - 0.02, framerMotionConfig);
+      animate(positionY, 0.5, framerMotionConfig);
+      animate(scale, initialScale + 0.04, framerMotionConfig);
 
       setTimeout(() => {
         animate(positionX, -10);

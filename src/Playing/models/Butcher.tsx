@@ -189,6 +189,12 @@ export function Butcher({ group, ...props }: any) {
       linearDamping={12}
       onIntersectionEnter={({ other }) => {
         dispatch({ type: 'collect-or-hit', payload: other.rigidBody?.userData as any });
+        if (['grave', 'spider', 'nail'].includes(other.rigidBody?.userData!.type)) {
+          dispatch({ type: 'setCharacterAnimation', payload: 'hitFromBackWhileRunning' });
+          setTimeout(() => {
+            dispatch({ type: 'setCharacterAnimation', payload: 'slowRun' });
+          }, 800);
+        }
       }}
       lockRotations
     >
