@@ -120,7 +120,7 @@ export function Game() {
           />
         ))}
 
-        <Butcher group={player.current} scale={0.09} />
+        <Butcher group={player} scale={0.09} />
       </group>
     </>
   );

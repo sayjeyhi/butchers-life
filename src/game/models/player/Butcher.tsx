@@ -2,7 +2,7 @@ import { useGLTF } from '@react-three/drei';
 import { useFrame } from '@react-three/fiber';
 import { CapsuleCollider, IntersectionEnterHandler, RigidBody } from '@react-three/rapier';
 import { animate, useMotionValue } from 'framer-motion';
-import { useEffect, useRef } from 'react';
+import { MutableRefObject, useEffect, useRef } from 'react';
 import * as THREE from 'three';
 import { Clock, Group } from 'three';
 import { GLTF } from 'three-stdlib';
@@ -14,6 +14,7 @@ import { addRewardsAtom, collectRewardAtom } from '../../../atoms/rewards.ts';
 import { addObstaclesAtom, hitObstaclesAtom } from '../../../atoms/obstacles.ts';
 import { gameStatusAtom } from '../../../atoms/game.ts';
 import { GameCollectPayload, GameCollidePayload, GameHitPayload } from '../../types.ts';
+import { collectAudio, hitObstacleAudio, playAudio } from '../../../common/helpers/audio.ts';
 
 type GLTFResult = GLTF & {
   nodes: {
@@ -36,7 +37,7 @@ type GLTFResult = GLTF & {
 };
 
 type ButcherProps = JSX.IntrinsicElements['group'] & {
-  group?: Group;
+  group?: MutableRefObject<Group | undefined>;
 };
 
 export function Butcher({ group, ...props }: ButcherProps) {
@@ -133,8 +134,10 @@ export function Butcher({ group, ...props }: ButcherProps) {
     const userData = other.rigidBody?.userData as GameCollidePayload;
 
     if (['grave', 'spider', 'nail'].includes(userData.type)) {
+      playAudio(hitObstacleAudio);
       hitObstacle(userData as GameHitPayload);
-    } else if (['grave', 'spider', 'nail'].includes(userData!.type)) {
+    } else if (['coin', 'meat', 'knife'].includes(userData!.type)) {
+      playAudio(collectAudio);
       collectReward(userData as GameCollectPayload);
     }
   };

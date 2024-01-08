@@ -1,7 +1,8 @@
 import { useAnimations, useFBX } from '@react-three/drei';
 import { Group } from 'three';
+import { MutableRefObject } from 'react';
 
-export const useButcherAnimations = (group: Group | undefined) => {
+export const useButcherAnimations = (group: MutableRefObject<Group | undefined> | undefined) => {
   const { animations: catwalk } = useFBX('/animations/an-catwalk.fbx');
   const { animations: dancing } = useFBX('/animations/an-dancing.fbx');
   const { animations: drunkRun } = useFBX('/animations/an-drunk-run.fbx');
