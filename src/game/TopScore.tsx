@@ -1,11 +1,18 @@
-import { useGame } from './hooks/useGame.ts';
 import { SettingModal } from './SettingModal.tsx';
+import { useAtomValue, useSetAtom } from 'jotai';
+import { achievedAwardAtom, achievedCoinsAtom, livesAtom, timeAtom } from '../atoms/score.ts';
+import { gameStatusAtom, pauseGameAtom } from '../atoms/game.ts';
 
 export const TopScore = () => {
-  const { lives, achievedCoins, achievedAward, timer, dispatch, status } = useGame();
+  const lives = useAtomValue(livesAtom);
+  const achievedCoins = useAtomValue(achievedCoinsAtom);
+  const achievedAward = useAtomValue(achievedAwardAtom);
+  const timer = useAtomValue(timeAtom);
+  const status = useAtomValue(gameStatusAtom);
+  const pauseGame = useSetAtom(pauseGameAtom);
 
   const handleShowSettings = () => {
-    dispatch({ type: 'pause' });
+    pauseGame();
   };
 
   return (

@@ -1,11 +1,12 @@
 import { animate, useMotionValue } from 'framer-motion';
 import { useEffect } from 'react';
 import { framerMotionConfig } from '../../constants.ts';
-import { useFrame } from '@react-three/fiber';
+import { useFrame, Vector3 } from '@react-three/fiber';
+import { Group } from 'three';
 
 type Options = {
-  ref: any;
-  initialScale: number;
+  ref: Group | null;
+  initialScale?: Vector3 | number;
   isColloid: boolean;
 };
 
@@ -18,7 +19,10 @@ export const useCollectOnCollide = ({ ref, isColloid, initialScale }: Options) =
   useEffect(() => {
     if (isColloid) {
       animate(positionY, 0.5, framerMotionConfig);
-      animate(scale, initialScale + 0.04, framerMotionConfig);
+
+      if (typeof initialScale === 'number') {
+        animate(scale, initialScale + 0.04, framerMotionConfig);
+      }
 
       setTimeout(() => {
         animate(positionX, -10);

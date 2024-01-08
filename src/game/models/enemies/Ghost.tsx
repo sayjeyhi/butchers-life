@@ -3,8 +3,9 @@ import { useGraph } from '@react-three/fiber';
 import { RigidBody } from '@react-three/rapier';
 import { useMemo, useRef } from 'react';
 import { SkeletonUtils } from 'three-stdlib';
-import { useGame } from '../../hooks/useGame.ts';
 import { useMoveItemOnRoad } from '../../hooks/useMoveItemOnRoad.ts';
+import { useAtomValue } from 'jotai';
+import { gameStatusAtom } from '../../../atoms/game.ts';
 
 export function Ghost(props: JSX.IntrinsicElements['group']) {
   const group = useRef(null);
@@ -13,7 +14,7 @@ export function Ghost(props: JSX.IntrinsicElements['group']) {
   const clone = useMemo(() => SkeletonUtils.clone(scene), [scene]);
   const { nodes } = useGraph(clone);
   const { actions } = useAnimations(animations, group);
-  const { status } = useGame();
+  const status = useAtomValue(gameStatusAtom);
 
   useMoveItemOnRoad({ animation: actions['Armature.001Action']!, sticky: true });
 

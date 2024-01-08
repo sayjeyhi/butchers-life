@@ -5,9 +5,10 @@ import * as THREE from 'three';
 import { GLTF } from 'three-stdlib';
 import { Explosion } from '../../effects/Explosion';
 import { useCollectOnCollideEnemy } from '../../hooks/useCollectOnCollideEnemy';
-import { useGame } from '../../hooks/useGame.ts';
 import { useMoveItemOnRoad } from '../../hooks/useMoveItemOnRoad';
 import { UUID } from '../../types';
+import { useAtomValue } from 'jotai';
+import { gameStatusAtom } from '../../../atoms/game.ts';
 
 type GLTFResult = GLTF & {
   nodes: {
@@ -62,6 +63,7 @@ export function Nail(props: NailProps) {
   const { nodes, materials } = useGLTF('/models/nails.glb') as GLTFResult;
   const rigid = useRef(null);
   const group = useRef(null);
+  const status = useAtomValue(gameStatusAtom);
 
   const { 'position-x': posX, 'position-y': posY, 'position-z': posZ, ...rest } = props;
   useMoveItemOnRoad({
@@ -74,8 +76,6 @@ export function Nail(props: NailProps) {
   });
 
   useCollectOnCollideEnemy({ ref: group.current, isColloid: props.isCollected });
-
-  const { status } = useGame();
 
   if (status === 'idle') {
     return null;

@@ -1,13 +1,13 @@
 import { atom } from 'jotai';
-import { GameCollectPayload, GameObject } from '../types.ts';
-import { checkAndCollectItem, randomPositions } from '../_helpers/gameObjects.ts';
+import { GameCollectPayload, GameObject } from '../game/types.ts';
+import { checkAndCollectItem, randomPositions } from '../common/helpers/gameObjects.ts';
 import { achievedAwardAtom, achievedCoinsAtom, achievedMeatsAtom, achievedKnifesAtom } from './score.ts';
 
 export const coinsAtom = atom<GameObject[]>([]);
 export const meatsAtom = atom<GameObject[]>([]);
 export const knifesAtom = atom<GameObject[]>([]);
 
-export const addRewards = atom(coinsAtom, (_, set) => {
+export const addRewardsAtom = atom(coinsAtom, (_, set) => {
   const availableRewards = ['coins', 'knifes', 'meats'] as const;
   const randomReward = availableRewards[Math.floor(Math.random() * availableRewards.length)];
 
@@ -25,7 +25,7 @@ export const addRewards = atom(coinsAtom, (_, set) => {
   }
 });
 
-export const collectReward = atom(coinsAtom, (_, set, arg: GameCollectPayload) => {
+export const collectRewardAtom = atom(coinsAtom, (_, set, arg: GameCollectPayload) => {
   const item = `${arg.type}s` as const;
 
   set(achievedAwardAtom, (awards) => awards + arg.award);

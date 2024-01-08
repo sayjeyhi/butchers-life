@@ -1,7 +1,8 @@
 import { useEffect } from 'react';
 import { AnimationAction } from 'three';
-import { useGame } from './useGame';
 import { useMoveRigidBody } from './useMoveRigidBody';
+import { useAtomValue } from 'jotai';
+import { gameStatusAtom } from '../../atoms/game.ts';
 
 export const useMoveItemOnRoad = ({
   ref,
@@ -25,9 +26,8 @@ export const useMoveItemOnRoad = ({
   initialObjectPosY?: number;
   initialObjectPosZ?: number;
 }) => {
+  const status = useAtomValue(gameStatusAtom);
   useMoveRigidBody({ ref, sticky, rigidBody, name, initialObjectPosX, initialObjectPosY, initialObjectPosZ });
-
-  const { status } = useGame();
 
   useEffect(() => {
     if (!animation) return;

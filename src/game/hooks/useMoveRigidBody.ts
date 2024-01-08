@@ -1,7 +1,8 @@
 import { useFrame } from '@react-three/fiber';
 import { useRef } from 'react';
 import { INITIAL_SCROLL_SPEED } from '../../constants';
-import { useGame } from './useGame';
+import { useAtomValue } from 'jotai';
+import { gameStatusAtom } from '../../atoms/game.ts';
 
 export const useMoveRigidBody = ({
   ref,
@@ -20,7 +21,7 @@ export const useMoveRigidBody = ({
   initialObjectPosY?: number;
   initialObjectPosZ?: number;
 }) => {
-  const { status } = useGame();
+  const status = useAtomValue(gameStatusAtom);
   const position = useRef({ x: initialObjectPosX || 0, y: initialObjectPosY || 0, z: initialObjectPosZ || 0 });
 
   useFrame((_, delta) => {

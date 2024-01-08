@@ -1,17 +1,19 @@
 import { useNavigate } from '@tanstack/react-router';
-import { Button } from '../common/Button.tsx';
-import { useGame } from './hooks/useGame.ts';
+import { Button } from '../common/components/Button.tsx';
+import { useSetAtom } from 'jotai';
+import { restartGameAtom, resumeGameAtom } from '../atoms/game.ts';
 
 export const SettingModal = () => {
-  const { dispatch } = useGame();
+  const restartGame = useSetAtom(restartGameAtom);
+  const resumeGame = useSetAtom(resumeGameAtom);
   const navigate = useNavigate();
 
   const handleRestart = () => {
-    dispatch({ type: 'restart' });
+    restartGame();
   };
 
   const handleResume = () => {
-    dispatch({ type: 'resume' });
+    resumeGame();
   };
 
   return (

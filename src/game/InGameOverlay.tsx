@@ -1,26 +1,32 @@
 import { Idle } from './Idle';
 import { Result } from './Result';
 import { TopScore } from './TopScore';
-import { useGame } from './hooks/useGame';
 import { useGesture } from './hooks/useGesture';
+import { useSetAtom, useAtomValue } from 'jotai';
+import { changePlayerAnimationAtom, movePlayerAtom, playerAnimationAtom } from '../atoms/player.ts';
+import { gameStatusAtom } from '../atoms/game.ts';
 
 export function InGameOverlay() {
-  const { dispatch, status } = useGame();
+  const status = useAtomValue(gameStatusAtom);
+  const movePlayer = useSetAtom(movePlayerAtom);
+  const playerCurrentAnimation = useAtomValue(playerAnimationAtom);
+  const changePlayerAnimation = useSetAtom(changePlayerAnimationAtom);
+
   const { onTouchEnd, onTouchMove, onTouchStart } = useGesture({
     onSwipeLeft: () => {
-      dispatch({ type: 'move-left' });
+      movePlayer('left');
     },
     onSwipeRight: () => {
-      dispatch({ type: 'move-right' });
+      movePlayer('right');
     },
     onSwipeUp: () => {
-      dispatch({ type: 'setCharacterAnimation', payload: 'jump' });
+      changePlayerAnimation('jump');
       setTimeout(() => {
-        dispatch({ type: 'setCharacterAnimation', payload: 'slowRun' });
+        changePlayerAnimation(playerCurrentAnimation);
       }, 800);
     },
     onSwipeDown: () => {
-      dispatch({ type: 'sit' });
+      changePlayerAnimation('stopLookBack');
     },
   });
 

@@ -1,14 +1,14 @@
 import { atom } from 'jotai';
-import { GameStates } from '../types.ts';
+import { GameStates } from '../game/types.ts';
 import { playerAnimationAtom } from './player.ts';
-import { resetGame } from '../_helpers/atoms.ts';
+import { resetGame } from '../common/helpers/atoms.ts';
 import { timeAtom } from './score.ts';
 
 let timerRef: NodeJS.Timeout;
 
 export const gameStatusAtom = atom<GameStates>('not-started');
 
-export const getReady = atom(gameStatusAtom, (get, set) => {
+export const getReadyAtom = atom(gameStatusAtom, (get, set) => {
   const currentState = get(gameStatusAtom);
 
   if (currentState === 'not-started') {
@@ -17,7 +17,7 @@ export const getReady = atom(gameStatusAtom, (get, set) => {
   }
 });
 
-export const startGame = atom(gameStatusAtom, (_, set) => {
+export const startGameAtom = atom(gameStatusAtom, (_, set) => {
   set(gameStatusAtom, 'playing');
   set(playerAnimationAtom, 'slowRun');
 
@@ -26,13 +26,13 @@ export const startGame = atom(gameStatusAtom, (_, set) => {
   }, 1000);
 });
 
-export const pauseGame = atom(gameStatusAtom, (_, set) => {
+export const pauseGameAtom = atom(gameStatusAtom, (_, set) => {
   set(gameStatusAtom, 'paused');
 
   // pause timer
   clearInterval(timerRef);
 });
-export const resumeGame = atom(gameStatusAtom, (_, set) => {
+export const resumeGameAtom = atom(gameStatusAtom, (_, set) => {
   set(gameStatusAtom, 'playing');
 
   // resume timer
@@ -41,7 +41,7 @@ export const resumeGame = atom(gameStatusAtom, (_, set) => {
   }, 1000);
 });
 
-export const restartGame = atom(gameStatusAtom, (_, set) => {
+export const restartGameAtom = atom(gameStatusAtom, (_, set) => {
   resetGame(set);
 
   // reset timer

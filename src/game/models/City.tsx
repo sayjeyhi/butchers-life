@@ -2,12 +2,13 @@ import { useGLTF } from '@react-three/drei';
 import { useFrame } from '@react-three/fiber';
 import { useRef } from 'react';
 import { GAMEBOARD_LENGTH, INITIAL_SCROLL_SPEED } from '../../constants.ts';
-import { useGame } from '../hooks/useGame.ts';
+import { useAtomValue } from 'jotai';
+import { gameStatusAtom } from '../../atoms/game.ts';
 
 export function City(props: JSX.IntrinsicElements['group']) {
   const { nodes, materials } = useGLTF('/models/city-final-2232.glb');
   const ref = useRef(null);
-  const { status } = useGame();
+  const status = useAtomValue(gameStatusAtom);
 
   useFrame((_, delta) => {
     if (status === 'paused' || status === 'idle' || !ref.current) return;

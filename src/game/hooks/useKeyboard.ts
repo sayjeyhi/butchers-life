@@ -1,33 +1,40 @@
 import { useEffect } from 'react';
-import { useGame } from './useGame.js';
+import { gameStatusAtom, pauseGameAtom, resumeGameAtom, startGameAtom } from '../../atoms/game.ts';
+import { useAtomValue, useSetAtom } from 'jotai';
+import { changePlayerAnimationAtom, movePlayerAtom } from '../../atoms/player.ts';
 
 export const useKeyboard = () => {
-  const { dispatch, status } = useGame();
+  const status = useAtomValue(gameStatusAtom);
+  const changePlayerAnimation = useSetAtom(changePlayerAnimationAtom);
+  const movePlayer = useSetAtom(movePlayerAtom);
+  const pauseGame = useSetAtom(pauseGameAtom);
+  const resumeGame = useSetAtom(resumeGameAtom);
+  const startGame = useSetAtom(startGameAtom);
 
   useEffect(() => {
     const handleKeyPress = (e: KeyboardEvent) => {
       if (status === 'playing') {
         if (e.key === ' ') {
-          dispatch({ type: 'pause' });
+          pauseGame();
         }
         if (e.key === 'ArrowRight' || e.key === 'a') {
-          dispatch({ type: 'move-right' });
+          movePlayer('right');
         } else if (e.key === 'ArrowLeft' || e.key === 'd') {
-          dispatch({ type: 'move-left' });
+          movePlayer('left');
         } else if (e.key === 'ArrowUp' || e.key === 'w') {
-          dispatch({ type: 'setCharacterAnimation', payload: 'jump' });
+          changePlayerAnimation('jump');
           setTimeout(() => {
-            dispatch({ type: 'setCharacterAnimation', payload: 'slowRun' });
+            changePlayerAnimation('slowRun');
           }, 800);
         } else if (e.key === 'ArrowDown' || e.key === 's') {
-          dispatch({ type: 'sit' });
+          changePlayerAnimation('lookBackRun');
         } else if (e.key === 'Escape') {
-          dispatch({ type: 'pause' });
+          pauseGame();
         }
       } else if (status === 'paused' && e.key === ' ') {
-        dispatch({ type: 'resume' });
+        resumeGame();
       } else if (status === 'idle' && e.key === ' ') {
-        dispatch({ type: 'play' });
+        startGame();
       }
     };
 
@@ -37,5 +44,5 @@ export const useKeyboard = () => {
     return () => {
       window.removeEventListener('keydown', handleKeyPress);
     };
-  }, [dispatch, status]);
+  }, [changePlayerAnimation, movePlayer, pauseGame, resumeGame, startGame, status]);
 };

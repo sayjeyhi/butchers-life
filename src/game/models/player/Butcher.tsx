@@ -1,13 +1,19 @@
-import { useAnimations, useFBX, useGLTF } from '@react-three/drei';
+import { useGLTF } from '@react-three/drei';
 import { useFrame } from '@react-three/fiber';
-import { CapsuleCollider, RigidBody } from '@react-three/rapier';
+import { CapsuleCollider, IntersectionEnterHandler, RigidBody } from '@react-three/rapier';
 import { animate, useMotionValue } from 'framer-motion';
 import { useEffect, useRef } from 'react';
 import * as THREE from 'three';
-import { Clock } from 'three';
+import { Clock, Group } from 'three';
 import { GLTF } from 'three-stdlib';
-import { framerMotionConfig } from '../../constants.ts';
-import { useGame } from '../hooks/useGame.ts';
+import { framerMotionConfig } from '../../../constants.ts';
+import { useAtomValue, useSetAtom } from 'jotai';
+import { playerAnimationAtom, playerPositionAtom } from '../../../atoms/player.ts';
+import { useButcherAnimations } from './hooks/useButcherAnimations.ts';
+import { addRewardsAtom, collectRewardAtom } from '../../../atoms/rewards.ts';
+import { addObstaclesAtom, hitObstaclesAtom } from '../../../atoms/obstacles.ts';
+import { gameStatusAtom } from '../../../atoms/game.ts';
+import { GameCollectPayload, GameCollidePayload, GameHitPayload } from '../../types.ts';
 
 type GLTFResult = GLTF & {
   nodes: {
@@ -29,92 +35,39 @@ type GLTFResult = GLTF & {
   };
 };
 
-export function Butcher({ group, ...props }: any) {
+type ButcherProps = JSX.IntrinsicElements['group'] & {
+  group?: Group;
+};
+
+export function Butcher({ group, ...props }: ButcherProps) {
   const rigid = useRef(null);
   const { nodes, materials } = useGLTF('/models/butcher.glb') as GLTFResult;
+
   const clockRef = useRef(new Clock());
   const tasksRef = useRef({
     addRewards: { interval: 6, lastExecution: 0 },
     addObstacles: { interval: 10, lastExecution: 0 },
-    increaseSpeed: { interval: 30, lastExecution: 0 },
+    someEffect: { interval: 30, lastExecution: 0 }, // add effects, sounds, etc
   });
 
   const playerPositionX = useMotionValue(0);
   const playerPositionY = useMotionValue(0);
   const playerPositionZ = useMotionValue(0);
 
-  const { dispatch, playerPosition, status } = useGame();
-  let { playerAnimation } = useGame();
-  const { animations: catwalk } = useFBX('/animations/an-catwalk.fbx');
-  const { animations: dancing } = useFBX('/animations/an-dancing.fbx');
-  const { animations: drunkRun } = useFBX('/animations/an-drunk-run.fbx');
-  const { animations: fastRun } = useFBX('/animations/an-fast-run.fbx');
-  const { animations: flip } = useFBX('/animations/an-flip.fbx');
-  const { animations: goofyRun } = useFBX('/animations/an-goofy-run.fbx');
-  const { animations: headDownRun } = useFBX('/animations/an-head-down-run.fbx');
-  const { animations: hipHopDance } = useFBX('/animations/an-hip-hop-dance.fbx');
-  const { animations: hitAndFall } = useFBX('/animations/an-hit-and-fall.fbx');
-  const { animations: hitFromBackWhileRunning } = useFBX('/animations/an-hit-from-back-while-running.fbx');
-  const { animations: hitObstacle } = useFBX('/animations/an-hit-obstacle.fbx');
-  const { animations: jump } = useFBX('/animations/an-jump.fbx');
-  const { animations: jumpOn } = useFBX('/animations/an-jump-on.fbx');
-  const { animations: lookBackRun } = useFBX('/animations/an-look-back-run.fbx');
-  const { animations: runBackward } = useFBX('/animations/an-run-backward.fbx');
-  const { animations: runLookBack } = useFBX('/animations/an-run-look-back.fbx');
-  const { animations: slowRun } = useFBX('/animations/an-slow-run.fbx');
-  const { animations: stopLookBack } = useFBX('/animations/an-stop-look-back.fbx');
-  const { animations: idle } = useFBX('/animations/an-idle.fbx');
+  const { actions } = useButcherAnimations(group);
 
-  idle[0].name = 'idle';
-  catwalk[0].name = 'catwalk';
-  dancing[0].name = 'dancing';
-  drunkRun[0].name = 'drunkRun';
-  fastRun[0].name = 'fastRun';
-  flip[0].name = 'flip';
-  goofyRun[0].name = 'goofyRun';
-  headDownRun[0].name = 'headDownRun';
-  hipHopDance[0].name = 'hipHopDance';
-  hitAndFall[0].name = 'hitAndFall';
-  hitFromBackWhileRunning[0].name = 'hitFromBackWhileRunning';
-  hitObstacle[0].name = 'hitObstacle';
-  jump[0].name = 'jump';
-  jumpOn[0].name = 'jumpOn';
-  lookBackRun[0].name = 'lookBackRun';
-  runBackward[0].name = 'runBackward';
-  runLookBack[0].name = 'runLookBack';
-  slowRun[0].name = 'slowRun';
-  stopLookBack[0].name = 'stopLookBack';
+  let playerAnimation = useAtomValue(playerAnimationAtom);
+  const playerPosition = useAtomValue(playerPositionAtom);
+  const status = useAtomValue(gameStatusAtom);
+  const addReward = useSetAtom(addRewardsAtom);
+  const addObstacles = useSetAtom(addObstaclesAtom);
+  const collectReward = useSetAtom(collectRewardAtom);
+  const hitObstacle = useSetAtom(hitObstaclesAtom);
 
-  const { actions } = useAnimations(
-    [
-      idle[0],
-      // types of run
-      slowRun[0],
-      drunkRun[0],
-      fastRun[0],
-      goofyRun[0],
-      runBackward[0],
-      lookBackRun[0],
-      runLookBack[0],
-      headDownRun[0],
-      // jumps
-      jump[0],
-      jumpOn[0],
-      flip[0],
-      // stop
-      stopLookBack[0],
-      // funny and win
-      catwalk[0],
-      dancing[0],
-      hipHopDance[0],
-      // hits and loose
-      hitAndFall[0],
-      hitFromBackWhileRunning[0],
-      hitObstacle[0],
-    ],
-    group,
-  );
-
+  console.log({
+    playerAnimation,
+    playerPosition,
+  });
   useEffect(() => {
     if (!playerAnimation || !actions[playerAnimation]) return;
 
@@ -163,23 +116,28 @@ export function Butcher({ group, ...props }: any) {
       true,
     );
 
+    // add rewards and obstacles infinitely
     const elapsedTime = clockRef.current.getElapsedTime();
     const tasks = tasksRef.current;
     if (elapsedTime - tasks.addRewards.lastExecution >= tasks.addRewards.interval) {
       tasks.addRewards.lastExecution = elapsedTime;
-      dispatch({ type: 'add-reward' });
+      addReward();
     }
     if (elapsedTime - tasks.addObstacles.lastExecution >= tasks.addObstacles.interval) {
-      console.log('Adding Obstacles: Doing something every 10 seconds');
       tasks.addObstacles.lastExecution = elapsedTime;
-      dispatch({ type: 'add-obstacle' });
-    }
-    if (elapsedTime - tasks.increaseSpeed.lastExecution >= tasks.increaseSpeed.interval) {
-      console.log('Increasing Speed: Doing something every 30 seconds');
-      tasks.increaseSpeed.lastExecution = elapsedTime;
-      dispatch({ type: 'increase-speed' });
+      addObstacles();
     }
   });
+
+  const handleCollision: IntersectionEnterHandler = ({ other }) => {
+    const userData = other.rigidBody?.userData as GameCollidePayload;
+
+    if (['grave', 'spider', 'nail'].includes(userData.type)) {
+      hitObstacle(userData as GameHitPayload);
+    } else if (['grave', 'spider', 'nail'].includes(userData!.type)) {
+      collectReward(userData as GameCollectPayload);
+    }
+  };
 
   return (
     <RigidBody
@@ -187,15 +145,7 @@ export function Butcher({ group, ...props }: any) {
       type="fixed"
       colliders={false}
       linearDamping={12}
-      onIntersectionEnter={({ other }) => {
-        dispatch({ type: 'collect-or-hit', payload: other.rigidBody?.userData as any });
-        if (['grave', 'spider', 'nail'].includes(other.rigidBody?.userData!.type)) {
-          dispatch({ type: 'setCharacterAnimation', payload: 'hitFromBackWhileRunning' });
-          setTimeout(() => {
-            dispatch({ type: 'setCharacterAnimation', payload: 'slowRun' });
-          }, 800);
-        }
-      }}
+      onIntersectionEnter={handleCollision}
       lockRotations
     >
       <CapsuleCollider args={[0.044, 0.14]} position={[0, playerAnimation === 'jump' ? 0.24 : 0.18, 0]} />

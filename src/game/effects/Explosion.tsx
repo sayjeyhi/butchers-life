@@ -1,27 +1,16 @@
 import { Instance, Instances } from '@react-three/drei';
 import { useFrame } from '@react-three/fiber';
 import { useMemo, useRef } from 'react';
-import { Color, MathUtils, Vector3 } from 'three';
+import { Group, MathUtils, Vector3 } from 'three';
 
-const greenColor = new Color('green');
-greenColor.multiplyScalar(12);
+type AnimatedInstanceProps = {
+  scale: number;
+  target: Vector3;
+  speed: number;
+};
 
-const redColor = new Color('red');
-redColor.multiplyScalar(12);
-
-const whiteColor = new Color('white');
-whiteColor.multiplyScalar(12);
-
-const blueColor = new Color('blue');
-blueColor.multiplyScalar(12);
-
-const yellowColor = new Color('yellow');
-yellowColor.multiplyScalar(12);
-
-const colors = [greenColor, redColor, whiteColor, blueColor, yellowColor];
-
-const AnimatedBox = ({ scale, target, speed, color }: any) => {
-  const ref = useRef(null);
+const AnimatedInstance = ({ scale, target, speed }: AnimatedInstanceProps) => {
+  const ref = useRef<Group>(null);
   useFrame((_, delta) => {
     if (!ref.current) return;
 
@@ -31,7 +20,7 @@ const AnimatedBox = ({ scale, target, speed, color }: any) => {
     ref.current.position.lerp(target, speed);
   });
 
-  return <Instance ref={ref} scale={scale} position={[0, 0, 0]} color={color} />;
+  return <Instance ref={ref} scale={scale} position={[0, 0, 0]} />;
 };
 
 export const Explosion = ({
@@ -42,7 +31,7 @@ export const Explosion = ({
   limitZ = 0.3,
   scale = 0.4,
 }) => {
-  const boxes = useMemo(
+  const objects = useMemo(
     () =>
       Array.from({ length: nb }, () => ({
         target: new Vector3(
@@ -61,8 +50,8 @@ export const Explosion = ({
       <Instances>
         <torusGeometry />
         <meshStandardMaterial toneMapped={false} />
-        {boxes.map((box, i) => (
-          <AnimatedBox key={i} {...box} />
+        {objects.map((box, i) => (
+          <AnimatedInstance key={i} {...box} />
         ))}
       </Instances>
     </group>

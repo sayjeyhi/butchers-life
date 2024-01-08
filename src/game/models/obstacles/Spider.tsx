@@ -3,9 +3,10 @@ import { CuboidCollider, RigidBody } from '@react-three/rapier';
 import { useRef } from 'react';
 import { Explosion } from '../../effects/Explosion';
 import { useCollectOnCollideEnemy } from '../../hooks/useCollectOnCollideEnemy';
-import { useGame } from '../../hooks/useGame';
 import { useMoveItemOnRoad } from '../../hooks/useMoveItemOnRoad';
 import { UUID } from '../../types';
+import { useAtomValue } from 'jotai';
+import { gameStatusAtom } from '../../../atoms/game.ts';
 
 type NailProps = JSX.IntrinsicElements['group'] & { isCollected: boolean; itemId: UUID };
 export function Spider(props: NailProps) {
@@ -13,6 +14,7 @@ export function Spider(props: NailProps) {
   const rigid = useRef(null);
   const { nodes, materials, animations } = useGLTF('/models/spider-with-web-final-12.glb');
   const { actions } = useAnimations(animations, group);
+  const status = useAtomValue(gameStatusAtom);
 
   const { 'position-x': posX, 'position-y': posY, 'position-z': posZ, ...rest } = props;
   useMoveItemOnRoad({
@@ -24,7 +26,6 @@ export function Spider(props: NailProps) {
     initialObjectPosY: posY,
     initialObjectPosZ: posZ,
   });
-  const { status } = useGame();
 
   useCollectOnCollideEnemy({ ref: group.current, isColloid: props.isCollected });
 

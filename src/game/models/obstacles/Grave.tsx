@@ -3,9 +3,10 @@ import { CuboidCollider, RigidBody } from '@react-three/rapier';
 import { useRef } from 'react';
 import { Explosion } from '../../effects/Explosion';
 import { useCollectOnCollideEnemy } from '../../hooks/useCollectOnCollideEnemy';
-import { useGame } from '../../hooks/useGame.ts';
 import { useMoveItemOnRoad } from '../../hooks/useMoveItemOnRoad';
 import { UUID } from '../../types';
+import { useAtomValue } from 'jotai';
+import { gameStatusAtom } from '../../../atoms/game.ts';
 
 type GraveProps = JSX.IntrinsicElements['group'] & { isCollected: boolean; itemId: UUID };
 
@@ -13,6 +14,7 @@ export function Grave(props: GraveProps) {
   const group = useRef(null);
   const rigid = useRef(null);
   const { nodes, materials } = useGLTF('/models/grave-21.glb');
+  const status = useAtomValue(gameStatusAtom);
 
   const { 'position-x': posX, 'position-y': posY, 'position-z': posZ, ...rest } = props;
   useMoveItemOnRoad({
@@ -25,8 +27,6 @@ export function Grave(props: GraveProps) {
   });
 
   useCollectOnCollideEnemy({ ref: group.current, isColloid: props.isCollected });
-
-  const { status } = useGame();
 
   if (status === 'idle') {
     return null;

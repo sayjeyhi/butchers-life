@@ -1,12 +1,13 @@
 import { useEffect, useRef, useState } from 'react';
-import { useGame } from './hooks/useGame.ts';
+import { useSetAtom } from 'jotai';
+import { startGameAtom } from '../atoms/game.ts';
 
 const countDownItems = ['Are you ready?', 'Three', 'Two', 'One', 'Start!'];
 
 export const Idle = () => {
   const counterRef = useRef(null);
   const [currentItem, setCurrentItem] = useState('');
-  const { dispatch } = useGame();
+  const startGame = useSetAtom(startGameAtom);
 
   useEffect(() => {
     if (!counterRef.current) return;
@@ -26,7 +27,7 @@ export const Idle = () => {
           );
         } else {
           setCurrentItem('');
-          dispatch({ type: 'play' });
+          startGame();
         }
       };
 
@@ -37,7 +38,7 @@ export const Idle = () => {
     };
 
     startCountdown();
-  }, []);
+  }, [startGame]);
 
   return (
     <div className="absolute left-1/2 top-1/2 flex h-full w-full -translate-x-1/2 -translate-y-1/2 transform items-center justify-center">

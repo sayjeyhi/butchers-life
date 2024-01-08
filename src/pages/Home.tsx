@@ -1,7 +1,7 @@
 import { useNavigate } from '@tanstack/react-router';
 import { useMeatAccount } from '../api/hooks/useMeatAccount.ts';
 import { useWalletAccount } from '../api/hooks/useWalletAccount.ts';
-import { Button } from '../common/Button.tsx';
+import { Button } from '../common/components/Button.tsx';
 
 export function Home() {
   const { connect, isConnected, disconnect } = useWalletAccount();

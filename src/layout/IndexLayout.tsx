@@ -1,5 +1,6 @@
 import { Outlet } from '@tanstack/react-router';
 import { Toolbar } from './Toolbar';
+
 export function IndexLayout() {
   return (
     <>

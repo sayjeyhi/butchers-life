@@ -1,8 +1,10 @@
-import { Button } from '../common/Button.tsx';
-import { useGame } from './hooks/useGame.ts';
+import { Button } from '../common/components/Button.tsx';
+import { useSetAtom } from 'jotai';
+import { restartGameAtom } from '../atoms/game.ts';
 
 export const Result = () => {
-  const { dispatch } = useGame();
+  const restartGame = useSetAtom(restartGameAtom);
+
   // const { fund } = useMeatAccount();
   // useEffect(() => {
   //   fund(`${achievedCoins}`);
@@ -15,7 +17,7 @@ export const Result = () => {
         <br />
         You earned 1000 points!
       </p>
-      <Button className="relative -bottom-8" onClick={() => dispatch({ type: 'restart' })}>
+      <Button className="relative -bottom-8" onClick={restartGame}>
         <img src="/images/game-controller.png" alt="Timer icon" className="absolute -left-2 -top-8 w-32" />
         PLAY AGAIN
       </Button>

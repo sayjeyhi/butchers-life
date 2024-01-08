@@ -2,9 +2,10 @@ import { useAnimations, useGLTF } from '@react-three/drei';
 import { CuboidCollider, RigidBody } from '@react-three/rapier';
 import { useRef } from 'react';
 import { useCollectOnCollide } from '../../hooks/useCollectOnCollide';
-import { useGame } from '../../hooks/useGame';
 import { useMoveItemOnRoad } from '../../hooks/useMoveItemOnRoad';
 import { UUID } from '../../types';
+import { useAtomValue } from 'jotai';
+import { gameStatusAtom } from '../../../atoms/game.ts';
 
 type MeatProps = JSX.IntrinsicElements['group'] & { isCollected: boolean; itemId: UUID };
 export function Meat(props: MeatProps) {
@@ -12,6 +13,7 @@ export function Meat(props: MeatProps) {
   const rigid = useRef(null);
   const { nodes, materials, animations } = useGLTF('/models/meat-final.glb');
   const { actions } = useAnimations(animations, group);
+  const status = useAtomValue(gameStatusAtom);
 
   const { 'position-x': posX, 'position-y': posY, 'position-z': posZ, ...rest } = props;
   useMoveItemOnRoad({
@@ -23,7 +25,6 @@ export function Meat(props: MeatProps) {
     initialObjectPosY: posY,
     initialObjectPosZ: posZ,
   });
-  const { status } = useGame();
 
   useCollectOnCollide({ ref: group.current, initialScale: props.scale, isColloid: props.isCollected });
 
