@@ -31,6 +31,11 @@ jobs:
         env:
           CI: true
 
+      - name: Fix Route issue 🧩
+        run: |
+          cp dist/index.html dist/404.html
+          cp dist/index.html dist/200.html
+          
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@3.6.2
         with:
