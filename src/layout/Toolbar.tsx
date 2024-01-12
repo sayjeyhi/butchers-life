@@ -5,9 +5,9 @@ export function Toolbar() {
     <div
       className="fixed bottom-0 left-0 right-0 z-20 flex h-[80px] w-[100vw] select-none justify-between gap-3
         bg-gradient-to-b from-green-500 to-green-700 px-[3vw] md:h-[120px] md:gap-5
-        md:px-[5vw] [&_button.active]:-translate-y-3 [&_button.active]:scale-105 [&_button.active]:transform [&_button.active]:rounded-xl [&_button.active]:bg-white [&_button.active]:font-semibold  [&_button.active]:text-green-700 [&_button.active]:shadow-xl
-        [&_button.active]:transition-transform [&_button.active]:duration-300 [&_button.active]:ease-in-out [&_button]:pointer-events-auto [&_button]:flex [&_button]:w-1/4 [&_button]:cursor-pointer [&_button]:flex-col [&_button]:items-center [&_button]:justify-center [&_button]:text-[13px]
-        [&_button]:text-white md:[&_button]:w-1/5 md:[&_button]:text-xl lg:[&_button]:text-2xl [&_img]:-mt-1 [&_img]:mb-1
+        md:px-[5vw] [&_a.active]:-translate-y-3 [&_a.active]:scale-105 [&_a.active]:transform [&_a.active]:rounded-xl [&_a.active]:bg-white [&_a.active]:font-semibold  [&_a.active]:text-green-700 [&_a.active]:shadow-xl
+        [&_a.active]:transition-transform [&_a.active]:duration-300 [&_a.active]:ease-in-out [&_a]:pointer-events-auto [&_a]:flex [&_a]:w-1/4 [&_a]:cursor-pointer [&_a]:flex-col [&_a]:items-center [&_a]:justify-center [&_a]:text-[13px]
+        [&_a]:text-white md:[&_a]:w-1/5 md:[&_a]:text-xl lg:[&_a]:text-2xl [&_img]:-mt-1 [&_img]:mb-1
         [&_img]:w-12 md:[&_img]:mb-2 md:[&_img]:mt-0
         md:[&_img]:w-16
       "
