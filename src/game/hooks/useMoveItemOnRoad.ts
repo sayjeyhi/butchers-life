@@ -1,33 +1,16 @@
 import { useEffect } from 'react';
 import { AnimationAction } from 'three';
-import { useMoveRigidBody } from './useMoveRigidBody';
 import { useAtomValue } from 'jotai';
 import { gameStatusAtom } from '../../atoms/game.ts';
 
-export const useMoveItemOnRoad = ({
-  ref,
-  animation,
-  name = '',
-  sticky = false,
-  effectiveTimeScale = 1.5,
-  rigidBody,
-  initialObjectPosX,
-  initialObjectPosY,
-  initialObjectPosZ,
-}: {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  ref?: any;
+type Options = {
   animation?: AnimationAction;
-  sticky?: boolean;
   effectiveTimeScale?: number;
-  name?: string;
-  rigidBody?: any;
-  initialObjectPosX?: number;
-  initialObjectPosY?: number;
-  initialObjectPosZ?: number;
-}) => {
+};
+
+export const useMoveItemOnRoad = (options?: Options) => {
+  const { animation, effectiveTimeScale = 1 } = options || {};
   const status = useAtomValue(gameStatusAtom);
-  useMoveRigidBody({ ref, sticky, rigidBody, name, initialObjectPosX, initialObjectPosY, initialObjectPosZ });
 
   useEffect(() => {
     if (!animation) return;

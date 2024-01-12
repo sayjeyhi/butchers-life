@@ -4,6 +4,7 @@ import { Suspense } from 'react';
 import { PCFSoftShadowMap } from 'three';
 import { DEBUG_MODE } from '../constants';
 import { Game } from './Game';
+import { Loader } from '../common/components/Loader.tsx';
 
 export function GameCanvas() {
   return (
@@ -19,7 +20,7 @@ export function GameCanvas() {
       >
         <color attach="background" args={['#333']} />
         <fog attach={'fog'} args={['#333', 14, 40]} />
-        <Suspense fallback={'LOADING...'}>
+        <Suspense fallback={<Loader />}>
           <Physics gravity={[0, 0, 0]} debug={DEBUG_MODE} interpolate={false} colliders={false}>
             <Game />
           </Physics>

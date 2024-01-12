@@ -9,7 +9,7 @@ export function randomPositions(count: number): GameObject[] {
     return {
       id: uuidv4() as UUID,
       isCollected: false,
-      position: [randomX, 0, 18],
+      position: [randomX, 0, 16],
     };
   });
 }

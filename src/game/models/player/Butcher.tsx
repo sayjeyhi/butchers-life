@@ -46,8 +46,8 @@ export function Butcher({ group, ...props }: ButcherProps) {
 
   const clockRef = useRef(new Clock());
   const tasksRef = useRef({
-    addRewards: { interval: 6, lastExecution: 0 },
-    addObstacles: { interval: 10, lastExecution: 0 },
+    addRewards: { interval: 4, lastExecution: 0 },
+    addObstacles: { interval: 7, lastExecution: 0 },
     someEffect: { interval: 30, lastExecution: 0 }, // add effects, sounds, etc
   });
 
@@ -65,10 +65,6 @@ export function Butcher({ group, ...props }: ButcherProps) {
   const collectReward = useSetAtom(collectRewardAtom);
   const hitObstacle = useSetAtom(hitObstaclesAtom);
 
-  console.log({
-    playerAnimation,
-    playerPosition,
-  });
   useEffect(() => {
     if (!playerAnimation || !actions[playerAnimation]) return;
 
@@ -84,10 +80,21 @@ export function Butcher({ group, ...props }: ButcherProps) {
     } else {
       animate(playerPositionY, 0, framerMotionConfig);
     }
-    const fadeDuration = playerAnimation === 'jump' ? 0.3 : 0.5;
+    const fadeDuration = playerAnimation === 'jump' ? 0.3 : 0.3;
 
     actions[playerAnimation]!.reset().fadeIn(fadeDuration).play();
 
+    /**
+     * Change animation speed
+     */
+    switch (playerAnimation) {
+      case 'jump':
+        actions[playerAnimation]!.setEffectiveTimeScale(0.6);
+        break;
+      case 'hitFromBackWhileRunning':
+        actions[playerAnimation]!.setEffectiveTimeScale(0.9);
+        break;
+    }
     return () => {
       if (!actions[playerAnimation]) return;
       actions[playerAnimation]!.reset().fadeOut(0.5);

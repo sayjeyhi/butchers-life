@@ -1,6 +1,6 @@
 import { Environment, OrbitControls } from '@react-three/drei';
 import { useRef } from 'react';
-import { COIN_SPACE, ENEMY_COLUMNS, ENEMY_SPACE_COLUMN, GAMEBOARD_LENGTH } from '../constants.ts';
+import { COIN_SPACE, ENEMY_COLUMNS, ENEMY_SPACE_COLUMN, GAME_BOARD_LENGTH } from '../constants.ts';
 import { useKeyboard } from './hooks/useKeyboard.ts';
 import { Butcher } from './models/player/Butcher.tsx';
 import { City } from './models/City.tsx';
@@ -43,8 +43,8 @@ export function Game() {
 
       <group>
         <City position-z={0} />
-        <City position-z={-GAMEBOARD_LENGTH} />
-        <City position-z={GAMEBOARD_LENGTH} />
+        <City position-z={-GAME_BOARD_LENGTH} />
+        <City position-z={GAME_BOARD_LENGTH} />
 
         {ghosts.map((item, index) => {
           const column = index % ENEMY_COLUMNS;

@@ -33,8 +33,8 @@ export const hitObstaclesAtom = atom(gravesAtom, (get, set, arg: GameHitPayload)
   const currentAnimation = get(playerAnimationAtom);
   set(playerAnimationAtom, 'hitFromBackWhileRunning');
   setTimeout(() => {
-    set(playerAnimationAtom, currentAnimation);
-  }, 800);
+    set(playerAnimationAtom, currentAnimation === 'hitFromBackWhileRunning' ? 'slowRun' : currentAnimation);
+  }, 400);
 
   // reduce life
   set(livesAtom, (life) => life - arg.damage);

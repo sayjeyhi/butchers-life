@@ -3,6 +3,8 @@ import { GameStates } from '../game/types.ts';
 import { playerAnimationAtom } from './player.ts';
 import { resetGame } from '../common/helpers/atoms.ts';
 import { timeAtom } from './score.ts';
+import { addRewardsAtom } from './rewards.ts';
+import { addObstaclesAtom } from './obstacles.ts';
 
 let timerRef: NodeJS.Timeout;
 
@@ -21,6 +23,7 @@ export const startGameAtom = atom(gameStatusAtom, (_, set) => {
   set(gameStatusAtom, 'playing');
   set(playerAnimationAtom, 'slowRun');
 
+  // start timer
   timerRef = setInterval(() => {
     set(timeAtom, (time) => time + 1);
   }, 1000);

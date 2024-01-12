@@ -22,12 +22,9 @@ export const useKeyboard = () => {
         } else if (e.key === 'ArrowLeft' || e.key === 'd') {
           movePlayer('left');
         } else if (e.key === 'ArrowUp' || e.key === 'w') {
-          changePlayerAnimation('jump');
-          setTimeout(() => {
-            changePlayerAnimation('slowRun');
-          }, 800);
+          changePlayerAnimation({ animation: 'jump', revertToCurrentAnimation: true, delayBeforeRevert: 800 });
         } else if (e.key === 'ArrowDown' || e.key === 's') {
-          changePlayerAnimation('lookBackRun');
+          changePlayerAnimation({ animation: 'lookBackRun', revertToCurrentAnimation: true, delayBeforeRevert: 800 });
         } else if (e.key === 'Escape') {
           pauseGame();
         }

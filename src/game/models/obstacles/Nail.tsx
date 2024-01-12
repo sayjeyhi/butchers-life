@@ -7,8 +7,7 @@ import { Explosion } from '../../effects/Explosion';
 import { useCollectOnCollideEnemy } from '../../hooks/useCollectOnCollideEnemy';
 import { useMoveItemOnRoad } from '../../hooks/useMoveItemOnRoad';
 import { UUID } from '../../types';
-import { useAtomValue } from 'jotai';
-import { gameStatusAtom } from '../../../atoms/game.ts';
+import { useMoveRigidBody } from '../../hooks/useMoveRigidBody.ts';
 
 type GLTFResult = GLTF & {
   nodes: {
@@ -63,23 +62,18 @@ export function Nail(props: NailProps) {
   const { nodes, materials } = useGLTF('/models/nails.glb') as GLTFResult;
   const rigid = useRef(null);
   const group = useRef(null);
-  const status = useAtomValue(gameStatusAtom);
 
   const { 'position-x': posX, 'position-y': posY, 'position-z': posZ, ...rest } = props;
-  useMoveItemOnRoad({
-    ref: group.current!,
-    rigidBody: rigid.current!,
-    name: 'nail',
+  useMoveItemOnRoad();
+
+  const { isReady } = useMoveRigidBody({
+    rigidBody: rigid.current,
     initialObjectPosX: posX,
     initialObjectPosY: posY,
     initialObjectPosZ: posZ,
   });
 
-  useCollectOnCollideEnemy({ ref: group.current, isColloid: props.isCollected });
-
-  if (status === 'idle') {
-    return null;
-  }
+  useCollectOnCollideEnemy({ ref: group.current, isCollected: props.isCollected });
 
   return (
     <RigidBody
@@ -97,30 +91,87 @@ export function Nail(props: NailProps) {
     >
       <CuboidCollider args={[0.15, 0.07, 0.2]} />
       {props.isCollected ? <Explosion scale={0.1} /> : null}
-      <group ref={group} {...rest} dispose={null}>
-        <group position={[-1.998, 0.911, -0.009]} rotation={[-3.139, -0.618, 0]} scale={[0.483, 0.315, 0.483]}>
-          <mesh castShadow receiveShadow geometry={nodes.Circle001_1.geometry} material={materials['Material.011']} />
-          <mesh castShadow receiveShadow geometry={nodes.Circle001_2.geometry} material={materials['Material.012']} />
-          <mesh castShadow receiveShadow geometry={nodes.Circle001_3.geometry} material={materials['Material.013']} />
-          <mesh castShadow receiveShadow geometry={nodes.Circle001_4.geometry} material={materials['Material.014']} />
-          <mesh castShadow receiveShadow geometry={nodes.Circle001_5.geometry} material={materials['Material.015']} />
-          <mesh castShadow receiveShadow geometry={nodes.Circle001_6.geometry} material={materials['Material.016']} />
-          <mesh castShadow receiveShadow geometry={nodes.Circle001_7.geometry} material={materials['Material.017']} />
-          <mesh castShadow receiveShadow geometry={nodes.Circle001_8.geometry} material={materials['Material.018']} />
-          <mesh castShadow receiveShadow geometry={nodes.Circle001_9.geometry} material={materials['Material.019']} />
-          <mesh castShadow receiveShadow geometry={nodes.Circle001_10.geometry} material={materials['Material.020']} />
-          <mesh castShadow receiveShadow geometry={nodes.Circle001_11.geometry} material={materials['Material.021']} />
-          <mesh castShadow receiveShadow geometry={nodes.Circle001_12.geometry} material={materials['Material.022']} />
-          <mesh castShadow receiveShadow geometry={nodes.Circle001_13.geometry} material={materials['Material.023']} />
-          <mesh castShadow receiveShadow geometry={nodes.Circle001_14.geometry} material={materials['Material.024']} />
-          <mesh castShadow receiveShadow geometry={nodes.Circle001_15.geometry} material={materials['Material.025']} />
-          <mesh castShadow receiveShadow geometry={nodes.Circle001_16.geometry} material={materials['Material.026']} />
-          <mesh castShadow receiveShadow geometry={nodes.Circle001_17.geometry} material={materials['Material.027']} />
-          <mesh castShadow receiveShadow geometry={nodes.Circle001_18.geometry} material={materials['Material.028']} />
-          <mesh castShadow receiveShadow geometry={nodes.Circle001_19.geometry} material={materials['Material.029']} />
-          <mesh castShadow receiveShadow geometry={nodes.Circle001_20.geometry} material={materials['Material.001']} />
+      {isReady && (
+        <group ref={group} {...rest} dispose={null}>
+          <group position={[-1.998, 0.911, -0.009]} rotation={[-3.139, -0.618, 0]} scale={[0.483, 0.315, 0.483]}>
+            <mesh castShadow receiveShadow geometry={nodes.Circle001_1.geometry} material={materials['Material.011']} />
+            <mesh castShadow receiveShadow geometry={nodes.Circle001_2.geometry} material={materials['Material.012']} />
+            <mesh castShadow receiveShadow geometry={nodes.Circle001_3.geometry} material={materials['Material.013']} />
+            <mesh castShadow receiveShadow geometry={nodes.Circle001_4.geometry} material={materials['Material.014']} />
+            <mesh castShadow receiveShadow geometry={nodes.Circle001_5.geometry} material={materials['Material.015']} />
+            <mesh castShadow receiveShadow geometry={nodes.Circle001_6.geometry} material={materials['Material.016']} />
+            <mesh castShadow receiveShadow geometry={nodes.Circle001_7.geometry} material={materials['Material.017']} />
+            <mesh castShadow receiveShadow geometry={nodes.Circle001_8.geometry} material={materials['Material.018']} />
+            <mesh castShadow receiveShadow geometry={nodes.Circle001_9.geometry} material={materials['Material.019']} />
+            <mesh
+              castShadow
+              receiveShadow
+              geometry={nodes.Circle001_10.geometry}
+              material={materials['Material.020']}
+            />
+            <mesh
+              castShadow
+              receiveShadow
+              geometry={nodes.Circle001_11.geometry}
+              material={materials['Material.021']}
+            />
+            <mesh
+              castShadow
+              receiveShadow
+              geometry={nodes.Circle001_12.geometry}
+              material={materials['Material.022']}
+            />
+            <mesh
+              castShadow
+              receiveShadow
+              geometry={nodes.Circle001_13.geometry}
+              material={materials['Material.023']}
+            />
+            <mesh
+              castShadow
+              receiveShadow
+              geometry={nodes.Circle001_14.geometry}
+              material={materials['Material.024']}
+            />
+            <mesh
+              castShadow
+              receiveShadow
+              geometry={nodes.Circle001_15.geometry}
+              material={materials['Material.025']}
+            />
+            <mesh
+              castShadow
+              receiveShadow
+              geometry={nodes.Circle001_16.geometry}
+              material={materials['Material.026']}
+            />
+            <mesh
+              castShadow
+              receiveShadow
+              geometry={nodes.Circle001_17.geometry}
+              material={materials['Material.027']}
+            />
+            <mesh
+              castShadow
+              receiveShadow
+              geometry={nodes.Circle001_18.geometry}
+              material={materials['Material.028']}
+            />
+            <mesh
+              castShadow
+              receiveShadow
+              geometry={nodes.Circle001_19.geometry}
+              material={materials['Material.029']}
+            />
+            <mesh
+              castShadow
+              receiveShadow
+              geometry={nodes.Circle001_20.geometry}
+              material={materials['Material.001']}
+            />
+          </group>
         </group>
-      </group>
+      )}
     </RigidBody>
   );
 }

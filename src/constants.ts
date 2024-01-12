@@ -6,8 +6,10 @@ export const ENEMY_COLUMNS = 3;
 export const ENEMY_SPACE_COLUMN = 0.3;
 export const ENEMY_SPACE_ROW = 4;
 export const COIN_SPACE = 1.2;
-export const INITIAL_SCROLL_SPEED = 3;
-export const GAMEBOARD_LENGTH = 31.404;
+export const INITIAL_GAME_SPEED = 5;
+export const MIN_GAME_SPEED = 3;
+export const MAX_GAME_SPEED = 250;
+export const GAME_BOARD_LENGTH = 31.404;
 
 export const framerMotionConfig: ValueAnimationTransition = {
   type: 'keyframes',

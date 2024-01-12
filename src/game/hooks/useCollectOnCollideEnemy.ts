@@ -3,16 +3,16 @@ import { useEffect } from 'react';
 import { framerMotionConfig } from '../../constants.ts';
 import { useFrame } from '@react-three/fiber';
 
-export const useCollectOnCollideEnemy = ({ ref, isColloid }: { ref: any; isColloid: boolean }) => {
+export const useCollectOnCollideEnemy = ({ ref, isCollected }: { ref: any; isCollected: boolean }) => {
   const positionY = useMotionValue(0);
   const positionZ = useMotionValue(0);
 
   useEffect(() => {
-    if (isColloid) {
+    if (isCollected) {
       animate(positionY, -0.3, framerMotionConfig);
       animate(positionZ, 2, framerMotionConfig);
     }
-  }, [positionY, positionZ, isColloid]);
+  }, [positionY, positionZ, isCollected]);
 
   useFrame(() => {
     if (!ref) return;

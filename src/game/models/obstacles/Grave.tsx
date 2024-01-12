@@ -5,8 +5,7 @@ import { Explosion } from '../../effects/Explosion';
 import { useCollectOnCollideEnemy } from '../../hooks/useCollectOnCollideEnemy';
 import { useMoveItemOnRoad } from '../../hooks/useMoveItemOnRoad';
 import { UUID } from '../../types';
-import { useAtomValue } from 'jotai';
-import { gameStatusAtom } from '../../../atoms/game.ts';
+import { useMoveRigidBody } from '../../hooks/useMoveRigidBody.ts';
 
 type GraveProps = JSX.IntrinsicElements['group'] & { isCollected: boolean; itemId: UUID };
 
@@ -14,23 +13,18 @@ export function Grave(props: GraveProps) {
   const group = useRef(null);
   const rigid = useRef(null);
   const { nodes, materials } = useGLTF('/models/grave-21.glb');
-  const status = useAtomValue(gameStatusAtom);
 
   const { 'position-x': posX, 'position-y': posY, 'position-z': posZ, ...rest } = props;
-  useMoveItemOnRoad({
-    ref: group.current!,
-    rigidBody: rigid.current!,
-    name: 'grave',
+  useMoveItemOnRoad();
+
+  const { isReady } = useMoveRigidBody({
+    rigidBody: rigid.current,
     initialObjectPosX: posX,
     initialObjectPosY: posY,
     initialObjectPosZ: posZ,
   });
 
-  useCollectOnCollideEnemy({ ref: group.current, isColloid: props.isCollected });
-
-  if (status === 'idle') {
-    return null;
-  }
+  useCollectOnCollideEnemy({ ref: group.current, isCollected: props.isCollected });
 
   return (
     <RigidBody
@@ -48,12 +42,14 @@ export function Grave(props: GraveProps) {
     >
       <CuboidCollider args={[0.09, 0.179, 0.2]} />
       {props.isCollected ? <Explosion scale={0.1} /> : null}
-      <group {...rest} ref={group} dispose={null}>
-        <group position={[0.101, 1.532, -0.793]} rotation={[-0.069, 0, 0]} scale={0.22}>
-          <mesh castShadow receiveShadow geometry={nodes.Cube110.geometry} material={materials['Material.012']} />
-          <mesh castShadow receiveShadow geometry={nodes.Cube110_1.geometry} material={materials['kelelawar.003']} />
+      {isReady && (
+        <group {...rest} ref={group} dispose={null}>
+          <group position={[0.101, 1.532, -0.793]} rotation={[-0.069, 0, 0]} scale={0.22}>
+            <mesh castShadow receiveShadow geometry={nodes.Cube110.geometry} material={materials['Material.012']} />
+            <mesh castShadow receiveShadow geometry={nodes.Cube110_1.geometry} material={materials['kelelawar.003']} />
+          </group>
         </group>
-      </group>
+      )}
     </RigidBody>
   );
 }

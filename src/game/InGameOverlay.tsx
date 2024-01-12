@@ -3,13 +3,12 @@ import { Result } from './Result';
 import { TopScore } from './TopScore';
 import { useGesture } from './hooks/useGesture';
 import { useSetAtom, useAtomValue } from 'jotai';
-import { changePlayerAnimationAtom, movePlayerAtom, playerAnimationAtom } from '../atoms/player.ts';
+import { changePlayerAnimationAtom, movePlayerAtom } from '../atoms/player.ts';
 import { gameStatusAtom } from '../atoms/game.ts';
 
 export function InGameOverlay() {
   const status = useAtomValue(gameStatusAtom);
   const movePlayer = useSetAtom(movePlayerAtom);
-  const playerCurrentAnimation = useAtomValue(playerAnimationAtom);
   const changePlayerAnimation = useSetAtom(changePlayerAnimationAtom);
 
   const { onTouchEnd, onTouchMove, onTouchStart } = useGesture({
@@ -20,13 +19,10 @@ export function InGameOverlay() {
       movePlayer('right');
     },
     onSwipeUp: () => {
-      changePlayerAnimation('jump');
-      setTimeout(() => {
-        changePlayerAnimation(playerCurrentAnimation);
-      }, 800);
+      changePlayerAnimation({ animation: 'jump', revertToCurrentAnimation: true, delayBeforeRevert: 800 });
     },
     onSwipeDown: () => {
-      changePlayerAnimation('stopLookBack');
+      changePlayerAnimation({ animation: 'stopLookBack', revertToCurrentAnimation: true, delayBeforeRevert: 800 });
     },
   });
 
