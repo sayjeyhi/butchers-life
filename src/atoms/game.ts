@@ -19,13 +19,20 @@ export const getReadyAtom = atom(gameStatusAtom, (get, set) => {
   }
 });
 
-export const startGameAtom = atom(gameStatusAtom, (_, set) => {
+export const startGameAtom = atom(gameStatusAtom, (get, set) => {
   set(gameStatusAtom, 'playing');
   set(playerAnimationAtom, 'slowRun');
 
   // start timer
   timerRef = setInterval(() => {
     set(timeAtom, (time) => time + 1);
+    const time = get(timeAtom);
+
+    // add rewards and obstacles
+    // bring new enemies every 5 seconds
+    if (time % 5 === 0) {
+      // add rewards
+    }
   }, 1000);
 });
 

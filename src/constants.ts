@@ -6,6 +6,7 @@ export const ENEMY_COLUMNS = 3;
 export const ENEMY_SPACE_COLUMN = 0.3;
 export const ENEMY_SPACE_ROW = 4;
 export const COIN_SPACE = 1.2;
+
 export const INITIAL_GAME_SPEED = 5;
 export const MIN_GAME_SPEED = 3;
 export const MAX_GAME_SPEED = 250;

@@ -68,7 +68,7 @@ export function Home() {
           </>
         ) : (
           <>
-            <Button className="-bottom-12 w-full md:w-[380px]" onClick={createAccount}>
+            <Button className="-bottom-12 w-full pl-0 md:w-[380px]" onClick={createAccount}>
               Create meat account
             </Button>
           </>

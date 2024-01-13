@@ -6,6 +6,7 @@ import { LeaderBoard } from './pages/LeaderBoard';
 import { Play } from './pages/Play';
 import { Settings } from './pages/Settings';
 import { Store } from './pages/Store';
+import { Profile } from './pages/Profile';
 
 const rootRoute = new RootRoute({
   component: RootLayout,
@@ -41,6 +42,12 @@ const leaderBoardRoute = new Route({
   component: LeaderBoard,
 });
 
+const profileRoute = new Route({
+  getParentRoute: () => indexRoute,
+  path: '/profile/$id',
+  component: Profile,
+});
+
 const playRoute = new Route({
   getParentRoute: () => rootRoute,
   path: '/play',
@@ -48,7 +55,7 @@ const playRoute = new Route({
 });
 
 const routeTree = rootRoute.addChildren([
-  indexRoute.addChildren([homeRoute, storeRoute, settingsRoute, leaderBoardRoute]),
+  indexRoute.addChildren([homeRoute, storeRoute, settingsRoute, leaderBoardRoute, profileRoute]),
   playRoute,
 ]);
 

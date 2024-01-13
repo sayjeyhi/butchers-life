@@ -126,9 +126,7 @@ body {
   cursor: pointer;
   font-size: 120%;
   line-height: 1.5;
-  margin: 0;
   -webkit-mask-image: -webkit-radial-gradient(#000, #fff);
-  padding: 0;
 }
 
 .btn-58:disabled {
@@ -156,7 +154,6 @@ body {
   display: block;
   font-weight: 900;
   -webkit-mask-image: none;
-  padding: 1.7rem 3rem 1.7rem 8rem;
   position: relative;
   text-transform: uppercase;
 }

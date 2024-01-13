@@ -1,7 +1,6 @@
 export function Settings() {
   return (
     <>
-      <h1 className="text-2xl font-bold">Settings</h1>
       <div className="w-full">
         <div className="flex justify-end px-4 pt-4">
           <button
@@ -29,7 +28,7 @@ export function Settings() {
               <li>
                 <a
                   href="#"
-                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-600 dark:hover:text-white"
+                  className="block px-6 py-4 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-600 dark:hover:text-white"
                 >
                   Edit
                 </a>
