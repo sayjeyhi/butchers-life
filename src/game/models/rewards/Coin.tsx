@@ -2,7 +2,7 @@ import { useAnimations, useGLTF } from '@react-three/drei';
 import { CuboidCollider, RigidBody } from '@react-three/rapier';
 import { useRef } from 'react';
 import { useCollectOnCollide } from '../../hooks/useCollectOnCollide';
-import { useMoveItemOnRoad } from '../../hooks/useMoveItemOnRoad';
+import { useItemAnimation } from '../../hooks/useItemAnimation';
 import { UUID } from '../../types';
 import { useMoveRigidBody } from '../../hooks/useMoveRigidBody.ts';
 
@@ -21,7 +21,7 @@ export function Coin(props: CoinProps) {
     initialObjectPosY: posY,
     initialObjectPosZ: posZ,
   });
-  useMoveItemOnRoad({
+  useItemAnimation({
     animation: actions['rotate']!,
     isOutOfView,
   });

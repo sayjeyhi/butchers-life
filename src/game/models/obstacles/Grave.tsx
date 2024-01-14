@@ -3,7 +3,7 @@ import { CuboidCollider, RigidBody } from '@react-three/rapier';
 import { useRef } from 'react';
 import { Explosion } from '../../effects/Explosion';
 import { useCollectOnCollideEnemy } from '../../hooks/useCollectOnCollideEnemy';
-import { useMoveItemOnRoad } from '../../hooks/useMoveItemOnRoad';
+import { useItemAnimation } from '../../hooks/useItemAnimation';
 import { UUID } from '../../types';
 import { useMoveRigidBody } from '../../hooks/useMoveRigidBody.ts';
 
@@ -21,7 +21,7 @@ export function Grave(props: GraveProps) {
     initialObjectPosY: posY,
     initialObjectPosZ: posZ,
   });
-  useMoveItemOnRoad({ isOutOfView });
+  useItemAnimation({ isOutOfView });
   useCollectOnCollideEnemy({ isOutOfView, ref: group.current, isCollected: props.isCollected });
 
   if (isOutOfView) {

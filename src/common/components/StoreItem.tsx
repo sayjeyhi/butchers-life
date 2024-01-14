@@ -1,12 +1,5 @@
 import { ComponentProps } from 'react';
-
-type Product = {
-  id: string;
-  name: string;
-  price: number;
-  image: string;
-  description: string;
-};
+import { Product } from '../../game/types.ts';
 
 type ItemProps = ComponentProps<'div'> &
   Product & {

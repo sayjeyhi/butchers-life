@@ -1,4 +1,9 @@
 import { StoreItem } from '../common/components/StoreItem.tsx';
+import { Basket } from '../common/components/Basket.tsx';
+import { useSetAtom } from 'jotai';
+import { addBasketItemAtom } from '../atoms/basket.ts';
+import { useCallback } from 'react';
+import { Product } from '../game/types.ts';
 
 const items = [
   {
@@ -32,9 +37,22 @@ const items = [
 ];
 
 export function Store() {
+  const addToBasket = useSetAtom(addBasketItemAtom);
+
+  const handleAddToBasket = useCallback(
+    (product: Product) => {
+      addToBasket(product);
+    },
+    [addToBasket],
+  );
+
   return (
     <>
-      <h1 className="text-2xl font-bold">Store</h1>
+      <div className="mb-5 flex items-center justify-between">
+        <h1 className="text-2xl font-bold">Store</h1>
+        <Basket />
+      </div>
+
       <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {items.map((item) => (
           <StoreItem
@@ -44,9 +62,7 @@ export function Store() {
             price={item.price}
             description={item.description}
             image={item.image}
-            onAdd={() => {
-              console.log('Add');
-            }}
+            onAdd={handleAddToBasket}
           />
         ))}
       </div>

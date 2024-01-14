@@ -9,7 +9,7 @@ type Options = {
   isOutOfView?: boolean;
 };
 
-export const useMoveItemOnRoad = (options?: Options) => {
+export const useItemAnimation = (options?: Options) => {
   const { animation, isOutOfView, effectiveTimeScale = 1 } = options || {};
   const status = useAtomValue(gameStatusAtom);
 

@@ -48,3 +48,11 @@ export type PlayerAnimation =
   | 'attack';
 
 export type PlayerPosition = 'center' | 'left' | 'right';
+
+export type Product = {
+  id: string;
+  name: string;
+  price: number;
+  image: string;
+  description: string;
+};

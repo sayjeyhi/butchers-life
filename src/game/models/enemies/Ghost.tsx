@@ -3,7 +3,7 @@ import { useGraph } from '@react-three/fiber';
 import { RigidBody } from '@react-three/rapier';
 import { useMemo, useRef } from 'react';
 import { SkeletonUtils } from 'three-stdlib';
-import { useMoveItemOnRoad } from '../../hooks/useMoveItemOnRoad.ts';
+import { useItemAnimation } from '../../hooks/useItemAnimation.ts';
 import { useAtomValue } from 'jotai';
 import { gameStatusAtom } from '../../../atoms/game.ts';
 
@@ -16,7 +16,7 @@ export function Ghost(props: JSX.IntrinsicElements['group']) {
   const { actions } = useAnimations(animations, group);
   const status = useAtomValue(gameStatusAtom);
 
-  useMoveItemOnRoad({ animation: actions['Armature.001Action']!, sticky: true });
+  useItemAnimation({ animation: actions['Armature.001Action']!, sticky: true });
 
   if (status === 'idle') {
     return null;

@@ -3,7 +3,7 @@ import { CuboidCollider, RigidBody } from '@react-three/rapier';
 import { useRef } from 'react';
 import { Explosion } from '../../effects/Explosion';
 import { useCollectOnCollideEnemy } from '../../hooks/useCollectOnCollideEnemy';
-import { useMoveItemOnRoad } from '../../hooks/useMoveItemOnRoad';
+import { useItemAnimation } from '../../hooks/useItemAnimation';
 import { UUID } from '../../types';
 import { useMoveRigidBody } from '../../hooks/useMoveRigidBody.ts';
 
@@ -22,7 +22,7 @@ export function Spider(props: NailProps) {
     initialObjectPosY: posY,
     initialObjectPosZ: posZ,
   });
-  useMoveItemOnRoad({
+  useItemAnimation({
     animation: actions['watch']!,
     isOutOfView,
   });

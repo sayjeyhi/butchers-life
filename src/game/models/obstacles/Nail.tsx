@@ -5,7 +5,7 @@ import * as THREE from 'three';
 import { GLTF } from 'three-stdlib';
 import { Explosion } from '../../effects/Explosion';
 import { useCollectOnCollideEnemy } from '../../hooks/useCollectOnCollideEnemy';
-import { useMoveItemOnRoad } from '../../hooks/useMoveItemOnRoad';
+import { useItemAnimation } from '../../hooks/useItemAnimation';
 import { UUID } from '../../types';
 import { useMoveRigidBody } from '../../hooks/useMoveRigidBody.ts';
 
@@ -71,7 +71,7 @@ export function Nail(props: NailProps) {
     initialObjectPosY: posY,
     initialObjectPosZ: posZ,
   });
-  useMoveItemOnRoad({ isOutOfView });
+  useItemAnimation({ isOutOfView });
   useCollectOnCollideEnemy({ ref: group.current, isOutOfView, isCollected: props.isCollected });
 
   if (isOutOfView) {
