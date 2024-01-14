@@ -15,24 +15,23 @@ export function Coin(props: CoinProps) {
   const { actions } = useAnimations(animations, group);
 
   const { 'position-x': posX, 'position-y': posY, 'position-z': posZ, ...rest } = props;
-  useMoveItemOnRoad({
-    animation: actions['rotate']!,
-  });
-
-  const { isReady } = useMoveRigidBody({
+  const { isReady, isOutOfView } = useMoveRigidBody({
     rigidBody: rigid.current,
     initialObjectPosX: posX,
     initialObjectPosY: posY,
     initialObjectPosZ: posZ,
   });
-
+  useMoveItemOnRoad({
+    animation: actions['rotate']!,
+    isOutOfView,
+  });
   useCollectOnCollide({
     ref: group.current,
+    isOutOfView,
     initialScale: props.scale,
     isCollected: props.isCollected,
   });
 
-  console.log('isReady', isReady);
   return (
     <RigidBody
       ref={rigid}

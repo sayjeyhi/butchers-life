@@ -65,8 +65,13 @@ export function Butcher({ group, ...props }: ButcherProps) {
   const collectReward = useSetAtom(collectRewardAtom);
   const hitObstacle = useSetAtom(hitObstaclesAtom);
 
+  const prevAnimation = useRef('');
   useEffect(() => {
     if (!playerAnimation || !actions[playerAnimation]) return;
+
+    if (prevAnimation.current && actions[prevAnimation.current]) {
+      actions[prevAnimation.current]!.fadeOut(1.3);
+    }
 
     // random animation when idle
     const funnyAnimations = ['dancing', 'hipHopDance'] as const;
@@ -82,19 +87,24 @@ export function Butcher({ group, ...props }: ButcherProps) {
     }
     const fadeDuration = playerAnimation === 'jump' ? 0.3 : 0.3;
 
-    actions[playerAnimation]!.reset().fadeIn(fadeDuration).play();
-
     /**
      * Change animation speed
      */
     switch (playerAnimation) {
       case 'jump':
+        playerAnimation = 'drunkRun';
         actions[playerAnimation]!.setEffectiveTimeScale(0.6);
         break;
       case 'hitFromBackWhileRunning':
         actions[playerAnimation]!.setEffectiveTimeScale(0.9);
         break;
+      case 'attack':
+        actions[playerAnimation]!.setEffectiveTimeScale(1.2);
+        break;
     }
+
+    prevAnimation.current = playerAnimation;
+    actions[playerAnimation]!.reset().fadeIn(fadeDuration).play();
     return () => {
       if (!actions[playerAnimation]) return;
       actions[playerAnimation]!.reset().fadeOut(0.5);

@@ -20,13 +20,14 @@ export const useMoveRigidBody = ({
   initialObjectPosZ?: number;
 }) => {
   const [isReady, setIsReady] = useState(false);
+  const [isOutOfView, setIsOutOfView] = useState(false);
 
   const status = useAtomValue(gameStatusAtom);
   const getSpeed = useGameSpeed();
   const position = useRef({ x: initialObjectPosX || 0, y: initialObjectPosY || 0, z: initialObjectPosZ || 0 });
 
   useFrame((_, delta) => {
-    if (sticky || !rigidBody || !position.current || status === 'paused') return;
+    if (sticky || !rigidBody || !position.current || status === 'paused' || isOutOfView) return;
 
     if (!isReady) {
       setTimeout(() => setIsReady(true), 10);
@@ -35,6 +36,10 @@ export const useMoveRigidBody = ({
     const realPositionX = initialObjectPosX || 0;
     const realPositionY = initialObjectPosY || 0;
     const realPositionZ = position.current.z - delta * getSpeed();
+
+    if (realPositionZ < -15) {
+      setIsOutOfView(true);
+    }
 
     position.current = {
       x: realPositionX,
@@ -54,5 +59,6 @@ export const useMoveRigidBody = ({
 
   return {
     isReady,
+    isOutOfView,
   };
 };

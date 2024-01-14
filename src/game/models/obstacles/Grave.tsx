@@ -15,16 +15,18 @@ export function Grave(props: GraveProps) {
   const { nodes, materials } = useGLTF('/models/grave-21.glb');
 
   const { 'position-x': posX, 'position-y': posY, 'position-z': posZ, ...rest } = props;
-  useMoveItemOnRoad();
-
-  const { isReady } = useMoveRigidBody({
+  const { isReady, isOutOfView } = useMoveRigidBody({
     rigidBody: rigid.current,
     initialObjectPosX: posX,
     initialObjectPosY: posY,
     initialObjectPosZ: posZ,
   });
+  useMoveItemOnRoad({ isOutOfView });
+  useCollectOnCollideEnemy({ isOutOfView, ref: group.current, isCollected: props.isCollected });
 
-  useCollectOnCollideEnemy({ ref: group.current, isCollected: props.isCollected });
+  if (isOutOfView) {
+    return null;
+  }
 
   return (
     <RigidBody

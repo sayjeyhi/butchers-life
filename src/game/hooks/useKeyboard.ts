@@ -24,7 +24,7 @@ export const useKeyboard = () => {
         } else if (e.key === 'ArrowUp' || e.key === 'w') {
           changePlayerAnimation({ animation: 'jump', revertToCurrentAnimation: true, delayBeforeRevert: 800 });
         } else if (e.key === 'ArrowDown' || e.key === 's') {
-          changePlayerAnimation({ animation: 'lookBackRun', revertToCurrentAnimation: true, delayBeforeRevert: 800 });
+          changePlayerAnimation({ animation: 'attack', revertToCurrentAnimation: true, delayBeforeRevert: 1000 });
         } else if (e.key === 'Escape') {
           pauseGame();
         }

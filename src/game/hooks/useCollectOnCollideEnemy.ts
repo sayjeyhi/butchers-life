@@ -3,7 +3,15 @@ import { useEffect } from 'react';
 import { framerMotionConfig } from '../../constants.ts';
 import { useFrame } from '@react-three/fiber';
 
-export const useCollectOnCollideEnemy = ({ ref, isCollected }: { ref: any; isCollected: boolean }) => {
+export const useCollectOnCollideEnemy = ({
+  ref,
+  isOutOfView,
+  isCollected,
+}: {
+  ref: any;
+  isOutOfView: boolean;
+  isCollected: boolean;
+}) => {
   const positionY = useMotionValue(0);
   const positionZ = useMotionValue(0);
 
@@ -15,7 +23,7 @@ export const useCollectOnCollideEnemy = ({ ref, isCollected }: { ref: any; isCol
   }, [positionY, positionZ, isCollected]);
 
   useFrame(() => {
-    if (!ref) return;
+    if (!ref || isOutOfView) return;
     ref!.position.y = positionY.get();
     ref!.position.z = positionZ.get();
   });

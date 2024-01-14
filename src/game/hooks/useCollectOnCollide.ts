@@ -1,5 +1,5 @@
 import { animate, useMotionValue } from 'framer-motion';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { framerMotionConfig } from '../../constants.ts';
 import { useFrame, Vector3 } from '@react-three/fiber';
 import { Group } from 'three';
@@ -8,9 +8,10 @@ type Options = {
   ref: Group | null;
   initialScale?: Vector3 | number;
   isCollected: boolean;
+  isOutOfView?: boolean;
 };
 
-export const useCollectOnCollide = ({ ref, isCollected, initialScale }: Options) => {
+export const useCollectOnCollide = ({ ref, isCollected, initialScale, isOutOfView }: Options) => {
   const positionX = useMotionValue(0);
   const positionY = useMotionValue(0);
   const positionZ = useMotionValue(0);
@@ -31,7 +32,7 @@ export const useCollectOnCollide = ({ ref, isCollected, initialScale }: Options)
   }, [positionX, positionY, positionZ, isCollected, scale, initialScale]);
 
   useFrame(() => {
-    if (!ref || !isCollected) return;
+    if (!ref || !isCollected || isOutOfView) return;
 
     ref!.position.x = positionX.get();
     ref!.position.y = positionY.get();

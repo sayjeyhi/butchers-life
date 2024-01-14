@@ -22,6 +22,8 @@ export const useButcherAnimations = (group: MutableRefObject<Group | undefined> 
   const { animations: slowRun } = useFBX('/animations/an-slow-run.fbx');
   const { animations: stopLookBack } = useFBX('/animations/an-stop-look-back.fbx');
   const { animations: idle } = useFBX('/animations/an-idle.fbx');
+  // attack
+  const { animations: attack } = useFBX('/animations/attack/Standing 1H Magic Attack 01.fbx');
 
   idle[0].name = 'idle';
   catwalk[0].name = 'catwalk';
@@ -42,6 +44,7 @@ export const useButcherAnimations = (group: MutableRefObject<Group | undefined> 
   runLookBack[0].name = 'runLookBack';
   slowRun[0].name = 'slowRun';
   stopLookBack[0].name = 'stopLookBack';
+  attack[0].name = 'attack';
 
   return useAnimations(
     [
@@ -69,6 +72,8 @@ export const useButcherAnimations = (group: MutableRefObject<Group | undefined> 
       hitAndFall[0],
       hitFromBackWhileRunning[0],
       hitObstacle[0],
+      // attack
+      attack[0],
     ],
     group,
   );

@@ -15,26 +15,28 @@ export function Knife(props: KnifeProps) {
   const { actions } = useAnimations(animations, group);
 
   const { 'position-x': posX, 'position-y': posY, 'position-z': posZ, ...rest } = props;
-  useMoveItemOnRoad({
-    animation: actions['jump']!,
-    effectiveTimeScale: 0.4,
-  });
-
-  const { isReady } = useMoveRigidBody({
+  const { isReady, isOutOfView } = useMoveRigidBody({
     ref: group.current,
     rigidBody: rigid.current,
     initialObjectPosX: posX,
     initialObjectPosY: posY,
     initialObjectPosZ: posZ,
   });
-
+  useMoveItemOnRoad({
+    animation: actions['jump']!,
+    isOutOfView,
+    effectiveTimeScale: 0.4,
+  });
   useCollectOnCollide({
     ref: group.current,
+    isOutOfView,
     initialScale: props.scale,
     isCollected: props.isCollected,
   });
 
-  console.log('isReady', isReady);
+  if (isOutOfView) {
+    return null;
+  }
 
   return (
     <RigidBody

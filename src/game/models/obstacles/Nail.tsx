@@ -64,16 +64,19 @@ export function Nail(props: NailProps) {
   const group = useRef(null);
 
   const { 'position-x': posX, 'position-y': posY, 'position-z': posZ, ...rest } = props;
-  useMoveItemOnRoad();
 
-  const { isReady } = useMoveRigidBody({
+  const { isReady, isOutOfView } = useMoveRigidBody({
     rigidBody: rigid.current,
     initialObjectPosX: posX,
     initialObjectPosY: posY,
     initialObjectPosZ: posZ,
   });
+  useMoveItemOnRoad({ isOutOfView });
+  useCollectOnCollideEnemy({ ref: group.current, isOutOfView, isCollected: props.isCollected });
 
-  useCollectOnCollideEnemy({ ref: group.current, isCollected: props.isCollected });
+  if (isOutOfView) {
+    return null;
+  }
 
   return (
     <RigidBody

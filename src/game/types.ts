@@ -44,6 +44,7 @@ export type PlayerAnimation =
   | 'runBackward'
   | 'runLookBack'
   | 'slowRun'
-  | 'stopLookBack';
+  | 'stopLookBack'
+  | 'attack';
 
 export type PlayerPosition = 'center' | 'left' | 'right';

@@ -1,10 +1,10 @@
-import { Html, useProgress } from '@react-three/drei';
+import { Html } from '@react-three/drei';
 
 export function Loader() {
-  const { progress } = useProgress();
   return (
     <Html center>
-      <div className="text-2xl text-white ">{(100 - progress).toFixed(0)}%</div>
+      <div className="loader"></div>
+      <div className="mt-8 text-center text-3xl text-white">Loading...</div>
     </Html>
   );
 }

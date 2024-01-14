@@ -6,21 +6,22 @@ import { gameStatusAtom } from '../../atoms/game.ts';
 type Options = {
   animation?: AnimationAction;
   effectiveTimeScale?: number;
+  isOutOfView?: boolean;
 };
 
 export const useMoveItemOnRoad = (options?: Options) => {
-  const { animation, effectiveTimeScale = 1 } = options || {};
+  const { animation, isOutOfView, effectiveTimeScale = 1 } = options || {};
   const status = useAtomValue(gameStatusAtom);
 
   useEffect(() => {
     if (!animation) return;
 
-    if (status === 'paused' || status === 'idle' || status === 'game-over') {
+    if (status === 'paused' || status === 'idle' || status === 'game-over' || isOutOfView) {
       animation.stop();
       animation.fadeOut(0.1);
     }
 
     animation.fadeIn(0.1).play();
     animation.setEffectiveTimeScale(effectiveTimeScale);
-  }, [animation, effectiveTimeScale, status]);
+  }, [animation, effectiveTimeScale, isOutOfView, status]);
 };
