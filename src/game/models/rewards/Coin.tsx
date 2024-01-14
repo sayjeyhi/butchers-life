@@ -32,6 +32,10 @@ export function Coin(props: CoinProps) {
     isCollected: props.isCollected,
   });
 
+  if (isOutOfView) {
+    return null;
+  }
+
   return (
     <RigidBody
       ref={rigid}
