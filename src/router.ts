@@ -7,6 +7,7 @@ import { Play } from './pages/Play';
 import { Settings } from './pages/Settings';
 import { Store } from './pages/Store';
 import { Profile } from './pages/Profile';
+import { Cart } from './pages/Cart';
 
 const rootRoute = new RootRoute({
   component: RootLayout,
@@ -22,6 +23,12 @@ const homeRoute = new Route({
   getParentRoute: () => indexRoute,
   path: '/',
   component: Home,
+});
+
+const cartRoute = new Route({
+  getParentRoute: () => indexRoute,
+  path: '/cart',
+  component: Cart,
 });
 
 const storeRoute = new Route({
@@ -55,7 +62,7 @@ const playRoute = new Route({
 });
 
 const routeTree = rootRoute.addChildren([
-  indexRoute.addChildren([homeRoute, storeRoute, settingsRoute, leaderBoardRoute, profileRoute]),
+  indexRoute.addChildren([homeRoute, storeRoute, settingsRoute, leaderBoardRoute, profileRoute, cartRoute]),
   playRoute,
 ]);
 
