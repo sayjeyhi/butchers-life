@@ -46,7 +46,7 @@ export function Toolbar() {
       </Link>
 
       <Link
-        to="/settings"
+        to="/profile"
         className="stonePunk"
         activeProps={{
           className: 'active',

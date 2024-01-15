@@ -1,104 +1,46 @@
 export function Settings() {
   return (
-    <>
-      <div className="w-full">
-        <div className="flex justify-end px-4 pt-4">
-          <button
-            id="dropdownButton"
-            data-dropdown-toggle="dropdown"
-            className="inline-block rounded-lg p-1.5 text-sm text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-700"
-            type="button"
-          >
-            <span className="sr-only">Open dropdown</span>
-            <svg
-              className="h-5 w-5"
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="currentColor"
-              viewBox="0 0 16 3"
-            >
-              <path d="M2 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm6.041 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM14 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Z" />
-            </svg>
-          </button>
-          <div
-            id="dropdown"
-            className="z-10 hidden w-44 list-none divide-y divide-gray-100 rounded-lg bg-white text-base shadow dark:bg-gray-700"
-          >
-            <ul className="py-2" aria-labelledby="dropdownButton">
-              <li>
-                <a
-                  href="#"
-                  className="block px-6 py-4 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-600 dark:hover:text-white"
-                >
-                  Edit
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-600 dark:hover:text-white"
-                >
-                  Export Data
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  className="block px-4 py-2 text-sm text-red-600 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-600 dark:hover:text-white"
-                >
-                  Delete
-                </a>
-              </li>
-            </ul>
-          </div>
-        </div>
-        <div className="flex flex-col items-center pb-10">
-          <img
-            className="mb-3 h-24 w-24 rounded-full border border-gray-100 shadow-lg"
-            src="/images/astronaut-avatar.png"
-            alt="Bonnie image"
-          />
-          <h5 className="mb-1 text-3xl font-medium text-gray-900">Bonnie Green</h5>
-          <span className="text-xl text-gray-500 dark:text-gray-400">
-            Level: <strong className="ml-2 font-semibold">24</strong>
+    <div className="w-full">
+      <div className="flex flex-col items-center pb-10">
+        {/* Items list*/}
+        <div className="my-4 flex h-5 gap-5">
+          <span className="flex items-center border-r border-green-300 pr-4 text-xl text-green-500">
+            <img src="/images/items/badge.png" className="h-12 w-12" />
+            <span className="ml-2 font-semibold">24</span>
           </span>
-          <div className="mt-4 flex md:mt-6">
-            <a
-              href="#"
-              className="inline-flex items-center rounded-lg bg-blue-700 px-4 py-2 text-center text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-            >
-              Add friend
-            </a>
-            <a
-              href="#"
-              className="ms-3 inline-flex items-center rounded-lg border border-gray-300 bg-white px-4 py-2 text-center text-sm font-medium text-gray-900 hover:bg-gray-100 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:hover:border-gray-700 dark:hover:bg-gray-700 dark:focus:ring-gray-700"
-            >
-              Message
-            </a>
-          </div>
+          <span className="flex items-center border-r border-green-300 pr-4 text-xl text-green-500">
+            <img src="/images/items/coin.png" className="h-7 w-7" />
+            <span className="ml-2 font-semibold">12k</span>
+          </span>
+          <span className="flex items-center border-r border-green-300 pr-4 text-xl text-green-500">
+            <img src="/images/items/knife.png" className="w-7" />
+            <span className="ml-2 font-semibold">45</span>
+          </span>
+          <span className="flex items-center text-xl text-green-500">
+            <img src="/images/items/meat.png" className="h-7 w-6" />
+            <span className="ml-2 font-semibold">12k</span>
+          </span>
         </div>
-      </div>
 
-      {/* audio radio toggle, nick name*/}
-      <div className="flex flex-col gap-4">
-        <div className="flex flex-row items-center gap-4">
-          Nickname:{' '}
-          <input type="text" placeholder="John" className="rounded-lg bg-[rgba(255,255,255,0.2)] p-2 backdrop-blur" />
-        </div>
-        <div className="flex flex-row items-center gap-4">
-          <input type="radio" name="audio" id="audio-on" />
-          <label htmlFor="audio-on">Audio On</label>
-        </div>
-        <div className="flex flex-row items-center gap-4">
-          <input type="radio" name="audio" id="audio-off" />
-          <label htmlFor="audio-off">Audio Off</label>
+        <div>
+          <dl>
+            <div className="bg-gray-50 px-4 py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+              <dt className="text-sm font-medium text-gray-500">Wallet address</dt>
+              <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
+                <input type="text" className="w-full rounded-md border border-gray-300 py-1 text-sm" />
+              </dd>
+            </div>
+            <div className="bg-white px-4 py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+              <dt className="text-sm font-medium text-gray-500">Online for</dt>
+              <dd className="mt-1 text-xs text-gray-900 sm:col-span-2 sm:mt-0">2 months and 5 days</dd>
+            </div>
+            <div className="bg-gray-50 px-4 py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+              <dt className="text-sm font-medium text-gray-500">Email address</dt>
+              <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">sayjeyhi@gmail.com</dd>
+            </div>
+          </dl>
         </div>
       </div>
-      <input type="range" className="w-full" />
-      <div className="flex flex-row gap-4">
-        <button className="rounded-lg bg-[rgba(255,255,255,0.2)] p-2 backdrop-blur">Cancel</button>
-        <button className="rounded-lg bg-[rgba(255,255,255,0.2)] p-2 backdrop-blur">Save</button>
-      </div>
-    </>
+    </div>
   );
 }

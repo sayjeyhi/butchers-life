@@ -37,12 +37,6 @@ const storeRoute = new Route({
   component: Store,
 });
 
-const settingsRoute = new Route({
-  getParentRoute: () => indexRoute,
-  path: '/settings',
-  component: Settings,
-});
-
 const leaderBoardRoute = new Route({
   getParentRoute: () => indexRoute,
   path: '/leader-board',
@@ -50,6 +44,17 @@ const leaderBoardRoute = new Route({
 });
 
 const profileRoute = new Route({
+  getParentRoute: () => indexRoute,
+  path: '/profile',
+  component: Profile,
+});
+
+const settingsRoute = new Route({
+  getParentRoute: () => indexRoute,
+  path: '/profile/settings',
+  component: Settings,
+});
+const othersProfileRoute = new Route({
   getParentRoute: () => indexRoute,
   path: '/profile/$id',
   component: Profile,
@@ -62,7 +67,15 @@ const playRoute = new Route({
 });
 
 const routeTree = rootRoute.addChildren([
-  indexRoute.addChildren([homeRoute, storeRoute, settingsRoute, leaderBoardRoute, profileRoute, cartRoute]),
+  indexRoute.addChildren([
+    homeRoute,
+    storeRoute,
+    settingsRoute,
+    leaderBoardRoute,
+    profileRoute,
+    othersProfileRoute,
+    cartRoute,
+  ]),
   playRoute,
 ]);
 
