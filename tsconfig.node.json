@@ -5,7 +5,8 @@
     "skipLibCheck": true,
     "module": "ESNext",
     "moduleResolution": "bundler",
+    "lib": ["ESNext"],
     "allowSyntheticDefaultImports": true
   },
-  "include": ["vite.config.ts", "bin"]
+  "include": ["vite.config.ts", "bin", "src/api/clientUtils.ts", "tests"]
 }

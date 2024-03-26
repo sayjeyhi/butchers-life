@@ -1,26 +1,46 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { accountExists, createAccount, fundAccount, getMeatAccount } from '../meat';
+import {
+  createMeatAccount,
+  fundMeatAccount,
+  getMeatAccount,
+  getMeatAccounts,
+  getMeatLeaderBoard,
+  meatAccountExists,
+} from '../meat';
 import { useWalletAccount } from './useWalletAccount';
 
-export function useMeatAccount() {
+export function useMeatService() {
   const { account: walletAccount, isConnected } = useWalletAccount();
   const accountAddress = walletAccount?.account ?? '';
   const client = useQueryClient();
-  const { data: exists } = useQuery({
+
+  const { data: hasMeatAccount } = useQuery({
     enabled: isConnected,
-    queryKey: ['meatAccountExists'],
-    queryFn: () => accountExists(accountAddress),
+    queryKey: ['meatAccountExists', accountAddress],
+    queryFn: () => meatAccountExists(accountAddress),
   });
 
-  const { data: account } = useQuery({
-    enabled: isConnected && exists,
-    queryKey: ['meatAccount'],
+  const { data: currentAccount } = useQuery({
+    enabled: isConnected && hasMeatAccount,
+    queryKey: ['meatAccount', accountAddress],
     queryFn: () => getMeatAccount(accountAddress),
   });
 
-  const { mutateAsync: create } = useMutation({
+  const { data: leaderBoard } = useQuery({
+    enabled: isConnected,
+    queryKey: ['getMeatLeaderBoard'],
+    queryFn: getMeatLeaderBoard,
+  });
+
+  const { data: accounts } = useQuery({
+    enabled: isConnected,
+    queryKey: ['getMeatAccounts'],
+    queryFn: getMeatAccounts,
+  });
+
+  const { mutateAsync: createAccount } = useMutation({
     mutationKey: ['createMeatAccount'],
-    mutationFn: async () => createAccount(),
+    mutationFn: createMeatAccount,
     onSuccess: () => {
       client.invalidateQueries({
         queryKey: ['meatAccountExists', 'meatAccount'],
@@ -28,10 +48,10 @@ export function useMeatAccount() {
     },
   });
 
-  const { mutateAsync: fund } = useMutation({
-    mutationKey: ['fundMeatAccount'],
-    mutationFn: async (amount: string) => fundAccount(accountAddress, amount),
+  const { mutateAsync: fundAccount } = useMutation({
+    mutationKey: ['fundMeatAccount', accountAddress],
+    mutationFn: async (amount: string) => fundMeatAccount(accountAddress, amount),
   });
 
-  return { create, fund, account, exists };
+  return { createAccount, fundAccount, currentAccount, hasMeatAccount, leaderBoard, accounts };
 }

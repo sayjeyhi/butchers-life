@@ -2,8 +2,9 @@ import { Pact, PactReference, createSignWithKeypair, readKeyset } from '@kadena/
 import { PactNumber } from '@kadena/pactjs';
 import { IPactDecimal } from '@kadena/types';
 import { appEnv } from '../appEnv';
-import { kdaClient, submitAndListen } from './client';
+import { getCmdDataOrFail, kdaClient, submitAndListen } from './client';
 import { IAccount } from './types';
+import { getNetwork } from './wallet';
 
 interface ICreateTokenIdInput {
   policies?: string[];
@@ -18,8 +19,7 @@ export async function createTokenId({
   precision = 0,
   creator,
 }: ICreateTokenIdInput): Promise<string> {
-  // const account = await getAccountOrFail();
-  // const { networkId } = await getNetwork();
+  const { networkId } = await getNetwork();
   const transaction = Pact.builder
     .execution(
       Pact.modules['marmalade-v2.ledger']['create-token-id'](
@@ -29,12 +29,11 @@ export async function createTokenId({
     )
     .addKeyset('creation-guard', 'keys-all', ...creator.keys.map((key) => key.publicKey))
     .setMeta({ chainId: appEnv.CHAIN_ID, senderAccount: creator.account })
-    .setNetworkId(appEnv.NETWORK_ID)
+    .setNetworkId(networkId)
     .createTransaction();
 
   const res = await kdaClient.dirtyRead(transaction);
-  console.log(res);
-  return res;
+  return getCmdDataOrFail(res) as string;
 }
 
 interface ICreateTokenInput {
@@ -46,6 +45,7 @@ interface ICreateTokenInput {
 }
 
 export async function createToken({ policies = [], uri, tokenId, precision = 0, creator }: ICreateTokenInput) {
+  const { networkId } = await getNetwork();
   const transaction = Pact.builder
     .execution(
       Pact.modules['marmalade-v2.ledger']['create-token'](
@@ -69,7 +69,7 @@ export async function createToken({ policies = [], uri, tokenId, precision = 0, 
       ],
     )
     .setMeta({ senderAccount: creator.account, chainId: creator.chainId })
-    .setNetworkId(appEnv.NETWORK_ID)
+    .setNetworkId(networkId)
     .createTransaction();
   const sign = createSignWithKeypair(creator.keys);
   const signedTx = await sign(transaction);
@@ -84,6 +84,7 @@ export interface IMintTokenInput {
 }
 
 export async function mintToken({ tokenId, creator, guard, amount }: IMintTokenInput) {
+  const { networkId } = await getNetwork();
   const tx = Pact.builder
     .execution(Pact.modules['marmalade-v2.ledger'].mint(tokenId, creator, readKeyset('guard'), amount))
     .addKeyset('guard', 'keys-all', ...guard.keys.map((key) => key.publicKey))
@@ -92,7 +93,7 @@ export async function mintToken({ tokenId, creator, guard, amount }: IMintTokenI
       (signFor) => [signFor('coin.GAS'), signFor('marmalade-v2.ledger.MINT', tokenId, creator, amount)],
     )
     .setMeta({ senderAccount: guard.account, chainId: guard.chainId })
-    .setNetworkId(appEnv.NETWORK_ID)
+    .setNetworkId(networkId)
     .createTransaction();
 
   const sign = createSignWithKeypair(guard.keys);

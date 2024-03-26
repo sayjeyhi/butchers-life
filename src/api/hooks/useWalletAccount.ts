@@ -14,14 +14,20 @@ export function useWalletAccount() {
 
   const { data, mutateAsync: connect } = useMutation({
     mutationKey: ['connectWalletAccount'],
-    mutationFn: async () => connectWallet(),
+    mutationFn: connectWallet,
+    onSuccess: () => {
+      client.invalidateQueries({
+        queryKey: ['walletAccountStatus'],
+      });
+    },
+    onError: () => {
+      alert('Failed to connect to wallet');
+    },
   });
 
   const { mutateAsync: disconnect } = useMutation({
     mutationKey: ['disconnectWalletAccount'],
-    mutationFn: async () => {
-      await disconnectWallet();
-    },
+    mutationFn: disconnectWallet,
     onSuccess: () => {
       client.invalidateQueries({
         queryKey: ['walletAccountStatus'],

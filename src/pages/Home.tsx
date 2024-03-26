@@ -1,20 +1,22 @@
 import { useNavigate } from '@tanstack/react-router';
-import { useMeatAccount } from '../api/hooks/useMeatAccount.ts';
+import { useMeatService } from '../api/hooks/useMeatAccount.ts';
 import { useWalletAccount } from '../api/hooks/useWalletAccount.ts';
 import { Button } from '../common/components/Button.tsx';
 
 export function Home() {
   const { connect, isConnected, disconnect } = useWalletAccount();
-  const { account, create, exists, fund } = useMeatAccount();
+  const { currentAccount, createAccount, hasMeatAccount, fundAccount, accounts } = useMeatService();
   const navigate = useNavigate();
-  const createAccount = async () => {
+  console.log(accounts);
+  const handleCreateAccount = async () => {
     try {
       if (!isConnected) {
         await connect();
       }
-      await create();
+      await createAccount();
       // await fund('1000');
     } catch (e) {
+      console.log(e);
       navigate({
         to: '/play',
       });
@@ -34,10 +36,10 @@ export function Home() {
       </h1>
       <p className="mt-3 text-center text-xl">Run from Ghosts and Score some stars!</p>
       <div className="mt-3 flex w-full flex-col items-center justify-center">
-        {isConnected && exists ? (
+        {isConnected && hasMeatAccount ? (
           <>
-            <p className="mt-3 text-center text-xl">Connected account {account?.account}</p>
-            <p className="mt-3 text-center text-xl">Balance {account?.balance} Meat</p>
+            <p className="mt-3 text-center text-xl">Connected account {currentAccount?.account}</p>
+            <p className="mt-3 text-center text-xl">Balance {currentAccount?.balance} Meat</p>
             <Button
               className="-bottom-12 w-full pl-9 md:w-[380px]"
               onClick={() => {
@@ -60,18 +62,16 @@ export function Home() {
             <Button
               className="-bottom-12 w-full pl-9 md:w-[380px]"
               onClick={() => {
-                fund('1000');
+                fundAccount('1000');
               }}
             >
               Fund
             </Button>
           </>
         ) : (
-          <>
-            <Button className="-bottom-12 w-full pl-0 md:w-[380px]" onClick={createAccount}>
-              Create meat account
-            </Button>
-          </>
+          <Button className="-bottom-12 w-full md:w-[380px]" onClick={handleCreateAccount}>
+            Create meat account
+          </Button>
         )}
       </div>
     </>

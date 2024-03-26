@@ -7,14 +7,16 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "generate:types": "sh ./bin/generate-types.sh",
+    "generate:types": "pnpm cli generateTypes -c=coin pact/meat-token.pact pact/meat-gas-station.pact",
     "cli": "tsx --env-file .env ./bin/cli.ts ",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "verify": "tsc --pretty",
-    "format": "prettier --write src"
+    "format": "prettier --write src",
+    "test": "tsx --env-file .env.test tests/meat.spec.ts"
   },
   "dependencies": {
     "@kadena/client": "^1.7.0",
+    "@kadena/cryptography-utils": "^0.4.2",
     "@kadena/pactjs": "^0.4.2",
     "@react-three/drei": "9.75.0",
     "@react-three/fiber": "8.15.13",
@@ -63,6 +65,7 @@
     "tailwindcss": "^3.4.1",
     "tsx": "4.7.0",
     "typescript": "^5.3.3",
-    "vite": "5.0.11"
+    "vite": "5.0.11",
+    "vitest": "^1.1.3"
   }
 }

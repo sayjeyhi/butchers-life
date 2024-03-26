@@ -8,10 +8,12 @@
   'hello-ks: { "keys": [], "pred": "keys-all" }
 })
 (define-namespace "free" (read-keyset "hello-ks") (read-keyset "hello-ks"))
-;; load hello-world
-(load "hello-world.pact")
+(define-namespace "test" (read-keyset "hello-ks") (read-keyset "hello-ks"));; load hello-world
+(load "env/tool/test-env.pact")
 ;; run hello-world say-hello
-(print (hello-world.say-hello "Swuwi"))
+(print (test.test-env.init))
+(print (test.test-env.is-initiated))
+
 ;; commit the transaction
 (commit-tx)
 

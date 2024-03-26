@@ -1,12 +1,7 @@
-import { Pact, createSignWithKeypair, isSignedTransaction } from '@kadena/client';
+import { Pact, isSignedTransaction, readKeyset } from '@kadena/client';
 import { env } from './env';
 
-import { getAccountKey, kdaClient } from './utils';
-
-const signTransaction = createSignWithKeypair({
-  publicKey: env.APP_FUNDING_ACCOUNT_PUBLIC_KEY,
-  secretKey: env.APP_FUNDING_ACCOUNT_PRIVATE_KEY,
-});
+import { getAccountKey, kdaClient, signWithFundingAccount } from './utils';
 
 async function accountExists(account: string) {
   console.log('Checking if account exists...', account);
@@ -44,7 +39,7 @@ export async function fund(recipient: string, amount: string, preflight = false)
         ? Pact.modules.coin['transfer'](fundingAccount, recipient, {
             decimal: amount,
           })
-        : Pact.modules.coin['transfer-create'](fundingAccount, recipient, () => '(read-keyset "ks")', {
+        : Pact.modules.coin['transfer-create'](fundingAccount, recipient, readKeyset('ks'), {
             decimal: amount,
           }),
     )
@@ -62,7 +57,7 @@ export async function fund(recipient: string, amount: string, preflight = false)
     .setNetworkId(env.APP_NETWORK_ID)
     .createTransaction();
 
-  const signedTx = await signTransaction(transaction);
+  const signedTx = await signWithFundingAccount(transaction);
   if (preflight) {
     const preflightResponse = await kdaClient.preflight(signedTx);
     console.log(preflightResponse);

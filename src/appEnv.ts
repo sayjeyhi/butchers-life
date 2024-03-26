@@ -8,4 +8,5 @@ export const appEnv = {
   ADMIN_ACCOUNT: import.meta.env.APP_ADMIN_ACCOUNT ?? '0:0',
   ADMIN_ACCOUNT_PUBLIC_KEY: import.meta.env.APP_ADMIN_ACCOUNT_PUBLIC_KEY ?? '0',
   ADMIN_ACCOUNT_PRIVATE_KEY: import.meta.env.APP_ADMIN_ACCOUNT_PRIVATE_KEY ?? '0',
+  GAS_STATION_ACCOUNT: 'meat-gas-station',
 };
