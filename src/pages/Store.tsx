@@ -8,28 +8,28 @@ import { Product } from '../game/types.ts';
 const items = [
   {
     id: '1',
-    name: 'Heart 1',
+    name: 'Heart Basic',
     price: 12,
     description: 'Add 100 more health points',
     image: '/images/heart.png',
   },
   {
     id: '2',
-    name: 'Heart 2',
+    name: 'Heart Advanced',
     price: 45,
     description: 'Add 100 more health points',
     image: '/images/heart.png',
   },
   {
     id: '3',
-    name: 'Heart 3',
+    name: 'Heart Elite',
     price: 69,
     description: 'Add 100 more health points',
     image: '/images/heart.png',
   },
   {
     id: '4',
-    name: 'Heart 4',
+    name: 'Heart Master',
     price: 99,
     description: 'Add 100 more health points',
     image: '/images/heart.png',
