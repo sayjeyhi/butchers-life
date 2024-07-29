@@ -33,3 +33,20 @@ export const removeBasketItemAtom = atom(
     set(basketItemsAtom, newItems);
   },
 );
+
+export const basketReduceItemAtom = atom(
+  (get) => get(basketItemsAtom),
+  (get, set, id: string) => {
+    const items = get(basketItemsAtom);
+    const index = items.findIndex((i) => i.id === id);
+    if (index === -1) return;
+    const newItems = [...items];
+    if (newItems[index].quantity === 1) {
+      newItems.splice(index, 1);
+      set(basketItemsAtom, newItems);
+      return;
+    }
+    newItems[index].quantity -= 1;
+    set(basketItemsAtom, newItems);
+  },
+);

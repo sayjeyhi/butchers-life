@@ -1,9 +1,10 @@
 import { StoreItem } from '../common/components/StoreItem.tsx';
 import { Basket } from '../common/components/Basket.tsx';
 import { useSetAtom } from 'jotai';
-import { addBasketItemAtom } from '../atoms/basket.ts';
+import { addBasketItemAtom, basketItemsAtom, basketReduceItemAtom } from '../atoms/basket.ts';
 import { useCallback } from 'react';
 import { Product } from '../game/types.ts';
+import { useAtomValue } from 'jotai/index';
 
 const items = [
   {
@@ -38,6 +39,8 @@ const items = [
 
 export function Store() {
   const addToBasket = useSetAtom(addBasketItemAtom);
+  const minusBasket = useSetAtom(basketReduceItemAtom);
+  const basketItems = useAtomValue(basketItemsAtom);
 
   const handleAddToBasket = useCallback(
     (product: Product) => {
@@ -63,6 +66,8 @@ export function Store() {
             description={item.description}
             image={item.image}
             onAdd={handleAddToBasket}
+            onRemove={minusBasket}
+            addedCount={basketItems.find((i) => i.id === item.id)?.quantity || 0}
           />
         ))}
       </div>

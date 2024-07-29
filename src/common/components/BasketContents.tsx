@@ -66,7 +66,12 @@ export const BasketContents = () => {
         <strong className="font-semibold">${basketItems.reduce((acc, curr) => acc + curr.price, 0)}</strong>
       </div>
       <div className="flex justify-center px-3 pb-3">
-        <button className="w-full rounded-md bg-green-500 px-3 py-2 text-white hover:bg-green-600">Checkout</button>
+        <button
+          onClick={() => alert('You can checkout later :D')}
+          className="w-full rounded-md bg-green-500 px-3 py-2 text-white hover:bg-green-600"
+        >
+          Checkout
+        </button>
       </div>
     </div>
   );

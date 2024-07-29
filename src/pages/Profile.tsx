@@ -5,7 +5,7 @@ export function Profile() {
 
   return (
     <div className="w-full">
-      <div className="flex flex-col items-center pb-10">
+      <div className="flex flex-col items-center pt-10">
         <img
           className="mb-3 h-24 w-24 rounded-2xl border-4 border-gray-300 shadow-lg lg:h-40 lg:w-40"
           src="/images/astronaut-avatar.png"
@@ -79,6 +79,14 @@ export function Profile() {
             </div>
           </>
         )}
+      </div>
+
+      {/* Add bio text */}
+      <div className="mt-4 flex md:mt-6">
+        <span className="border-3 mx-4 flex items-center rounded-xl border-4 border-neutral-200 p-5 px-4 text-center text-lg text-neutral-600">
+          Hi, I am a 25 year old male from India. I love to play games and explore the world. I am a big fan of the game
+          Meat. I love to play it with my friends. Also, I love to play games and explore the world.
+        </span>
       </div>
     </div>
   );
