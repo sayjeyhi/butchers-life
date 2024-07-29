@@ -4,7 +4,7 @@ import { Toolbar } from './Toolbar';
 export function IndexLayout() {
   const matches = useParentMatches();
 
-  const isHome = matches[1].routeId === '/index-layout/';
+  const isHome = matches[1]?.routeId === '/index-layout/';
   return (
     <>
       <div
